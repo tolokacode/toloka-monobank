@@ -9,6 +9,8 @@
  * License URI: https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
+ * Text Domain: toloka-monobank
+ * Domain Path: /languages
  */
 
 defined('ABSPATH') || exit;
@@ -20,6 +22,10 @@ add_action('before_woocommerce_init', function () {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, false);
     }
+});
+
+add_action('init', function () {
+    load_plugin_textdomain('toloka-monobank', false, dirname(plugin_basename(__FILE__)) . '/languages');
 });
 
 add_action('plugins_loaded', function () {
@@ -54,7 +60,7 @@ register_deactivation_hook(__FILE__, function () {
 });
 
 add_filter('cron_schedules', function ($schedules) {
-    $schedules['toloka_5min'] = ['interval' => 300, 'display' => 'Кожні 5 хвилин (Toloka)'];
+    $schedules['toloka_5min'] = ['interval' => 300, 'display' => 'Every 5 minutes (Toloka)'];
     return $schedules;
 });
 
@@ -76,8 +82,8 @@ add_action('woocommerce_thankyou', function ($order_id) {
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
     $url = admin_url('admin.php?page=wc-settings&tab=checkout&section=');
     array_unshift($links,
-        '<a href="' . esc_url($url . 'toloka_chast') . '">Покупка частинами</a>',
-        '<a href="' . esc_url($url . 'cod') . '">Накладений платіж</a>'
+        '<a href="' . esc_url($url . 'toloka_chast') . '">' . esc_html__('Installments', 'toloka-monobank') . '</a>',
+        '<a href="' . esc_url($url . 'cod') . '">' . esc_html__('Cash on delivery', 'toloka-monobank') . '</a>'
     );
     return $links;
 });

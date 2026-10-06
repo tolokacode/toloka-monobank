@@ -16,24 +16,11 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
     const META_PARTS   = '_toloka_chast_parts';
     const META_ATTEMPT = '_toloka_chast_attempt';
 
-    const FAIL_REASONS = [
-        'CLIENT_NOT_FOUND'                => 'клієнта не знайдено в monobank',
-        'EXCEEDED_SUM_LIMIT'              => 'недостатній ліміт на Покупку частинами',
-        'EXISTS_OTHER_OPEN_ORDER'         => 'у клієнта є інша незавершена заявка',
-        'NOT_ENOUGH_MONEY_FOR_INIT_DEBIT' => 'недостатньо коштів для першого платежу',
-        'REJECTED_BY_CLIENT'              => 'клієнт відхилив заявку',
-        'PAY_PARTS_ARE_NOT_ACCEPTABLE'    => 'неприйнятна кількість платежів',
-        'FRAUD_REJECTED'                  => 'відхилено антифрод-системою банку',
-        'RESTRICTED_BY_RISKS'             => 'обмеження ризик-менеджменту банку',
-        'CLIENT_PUSH_TIMEOUT'             => 'клієнт не підтвердив за 15 хвилин',
-        'REJECTED_BY_STORE'               => 'скасовано магазином',
-        'FAIL'                            => 'внутрішня помилка банку',
-    ];
 
     public function __construct() {
         $this->id                 = 'toloka_chast';
-        $this->method_title       = 'Покупка частинами monobank';
-        $this->method_description = 'Оплата частинами через API monobank. Статуси: «На утриманні» → «В обробці» → «Виконано» (після відправки товару).';
+        $this->method_title       = __('monobank installments', 'toloka-monobank');
+        $this->method_description = __('Pay in installments through the monobank API. Statuses: On hold, then Processing, then Completed (after shipping).', 'toloka-monobank');
         $this->has_fields         = true;
         $this->supports           = ['products', 'refunds'];
 
@@ -48,22 +35,26 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
     public function init_form_fields() {
         $this->form_fields = [
-            'enabled'         => ['title' => 'Увімкнути', 'type' => 'checkbox', 'label' => 'Увімкнути Покупку частинами', 'default' => 'no'],
-            'title'           => ['title' => 'Назва', 'type' => 'text', 'default' => 'Покупка частинами monobank'],
-            'description'     => ['title' => 'Опис', 'type' => 'textarea', 'default' => 'Без переплат. Після оформлення підтвердіть покупку в застосунку monobank.'],
+            'enabled'         => ['title' => __('Enable', 'toloka-monobank'), 'type' => 'checkbox', 'label' => __('Enable monobank installments', 'toloka-monobank'), 'default' => 'no'],
+            'title'           => ['title' => __('Title', 'toloka-monobank'), 'type' => 'text', 'default' => __('monobank installments', 'toloka-monobank')],
+            'description'     => ['title' => __('Description', 'toloka-monobank'), 'type' => 'textarea', 'default' => __('No overpayment. After placing the order, confirm the purchase in the monobank app.', 'toloka-monobank')],
             'environment'     => [
-                'title'       => 'Середовище',
+                'title'       => __('Environment', 'toloka-monobank'),
                 'type'        => 'select',
                 'default'     => 'sandbox',
-                'options'     => ['sandbox' => 'Пісочниця (тест)', 'stage' => 'Stage (тест з реальним застосунком)', 'production' => 'Продакшн'],
-                'description' => 'Пісочниця: Store ID <code>test_store_with_confirm</code>, ключ <code>secret_98765432--123-123</code>. Телефон, що закінчується на 4, — схвалено.',
+                'options'     => [
+                    'sandbox'    => __('Sandbox (test)', 'toloka-monobank'),
+                    'stage'      => __('Stage (test with the real app)', 'toloka-monobank'),
+                    'production' => __('Production', 'toloka-monobank'),
+                ],
+                'description' => __('Sandbox: Store ID <code>test_store_with_confirm</code>, secret <code>secret_98765432--123-123</code>. A phone number ending in 4 is approved.', 'toloka-monobank'),
             ],
-            'store_id'        => ['title' => 'Store ID', 'type' => 'text'],
-            'store_secret'    => ['title' => 'Секретний ключ', 'type' => 'password'],
-            'parts'           => ['title' => 'Кількість платежів', 'type' => 'text', 'default' => '3,4,6', 'description' => 'Через кому, від 3 до 25. Мають відповідати договору з банком.'],
-            'min_total'       => ['title' => 'Мінімальна сума, грн', 'type' => 'number', 'default' => '500'],
-            'max_total'       => ['title' => 'Максимальна сума, грн', 'type' => 'number', 'default' => '', 'description' => 'Порожньо — без обмеження.'],
-            'show_on_product' => ['title' => 'Сторінка товару', 'type' => 'checkbox', 'label' => 'Показувати «N платежів по X ₴» під ціною', 'default' => 'yes'],
+            'store_id'        => ['title' => __('Store ID', 'toloka-monobank'), 'type' => 'text'],
+            'store_secret'    => ['title' => __('Secret key', 'toloka-monobank'), 'type' => 'password'],
+            'parts'           => ['title' => __('Number of payments', 'toloka-monobank'), 'type' => 'text', 'default' => '3,4,6', 'description' => __('Comma separated, from 3 to 25. Must match your contract with the bank.', 'toloka-monobank')],
+            'min_total'       => ['title' => __('Minimum amount, UAH', 'toloka-monobank'), 'type' => 'number', 'default' => '500'],
+            'max_total'       => ['title' => __('Maximum amount, UAH', 'toloka-monobank'), 'type' => 'number', 'default' => '', 'description' => __('Leave empty for no limit.', 'toloka-monobank')],
+            'show_on_product' => ['title' => __('Product page', 'toloka-monobank'), 'type' => 'checkbox', 'label' => __('Show "N payments of X" under the price', 'toloka-monobank'), 'default' => 'yes'],
         ];
     }
 
@@ -95,15 +86,36 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
     }
 
     public static function parts_label($parts, $sum) {
-        $word = ($parts % 10 >= 2 && $parts % 10 <= 4 && ($parts % 100 < 12 || $parts % 100 > 14)) ? 'платежі' : 'платежів';
-        return $sum > 0 ? sprintf('%d %s по ~%s', $parts, $word, wp_strip_all_tags(wc_price($sum / $parts))) : sprintf('%d %s', $parts, $word);
+        if ($sum <= 0) {
+            /* translators: %d: number of payments */
+            return sprintf(_n('%d payment', '%d payments', $parts, 'toloka-monobank'), $parts);
+        }
+        /* translators: 1: number of payments, 2: amount of one payment */
+        return sprintf(_n('%1$d payment of ~%2$s', '%1$d payments of ~%2$s', $parts, 'toloka-monobank'), $parts, wp_strip_all_tags(wc_price($sum / $parts)));
+    }
+
+    public static function fail_reason($code) {
+        $reasons = [
+            'CLIENT_NOT_FOUND'                => __('the customer is not a monobank client', 'toloka-monobank'),
+            'EXCEEDED_SUM_LIMIT'              => __('the customer\'s installments limit is too low', 'toloka-monobank'),
+            'EXISTS_OTHER_OPEN_ORDER'         => __('the customer has another open application', 'toloka-monobank'),
+            'NOT_ENOUGH_MONEY_FOR_INIT_DEBIT' => __('not enough money for the first payment', 'toloka-monobank'),
+            'REJECTED_BY_CLIENT'              => __('the customer declined', 'toloka-monobank'),
+            'PAY_PARTS_ARE_NOT_ACCEPTABLE'    => __('this number of payments is not allowed', 'toloka-monobank'),
+            'FRAUD_REJECTED'                  => __('declined by the bank\'s fraud check', 'toloka-monobank'),
+            'RESTRICTED_BY_RISKS'             => __('declined by the bank\'s risk rules', 'toloka-monobank'),
+            'CLIENT_PUSH_TIMEOUT'             => __('the customer did not confirm within 15 minutes', 'toloka-monobank'),
+            'REJECTED_BY_STORE'               => __('cancelled by the shop', 'toloka-monobank'),
+            'FAIL'                            => __('internal bank error', 'toloka-monobank'),
+        ];
+        return $reasons[$code] ?? $code;
     }
 
     public function payment_fields() {
         if ($this->description) {
             echo wpautop(wp_kses_post($this->description));
         }
-        echo '<p class="form-row form-row-wide"><label for="toloka_chast_parts">Кількість платежів</label><select name="toloka_chast_parts" id="toloka_chast_parts">';
+        echo '<p class="form-row form-row-wide"><label for="toloka_chast_parts">' . esc_html__('Number of payments', 'toloka-monobank') . '</label><select name="toloka_chast_parts" id="toloka_chast_parts">';
         foreach ($this->get_parts() as $p) {
             printf('<option value="%d">%s</option>', $p, esc_html(self::parts_label($p, $this->get_order_total())));
         }
@@ -112,11 +124,11 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
     public function validate_fields() {
         if (!in_array((int) ($_POST['toloka_chast_parts'] ?? 0), $this->get_parts(), true)) {
-            wc_add_notice('Оберіть кількість платежів.', 'error');
+            wc_add_notice(__('Choose the number of payments.', 'toloka-monobank'), 'error');
             return false;
         }
         if (!self::normalize_phone(wc_clean(wp_unslash($_POST['billing_phone'] ?? '')))) {
-            wc_add_notice('Для Покупки частинами вкажіть український номер телефону, прив\'язаний до monobank.', 'error');
+            wc_add_notice(__('For monobank installments, enter a Ukrainian phone number linked to monobank.', 'toloka-monobank'), 'error');
             return false;
         }
         return true;
@@ -162,15 +174,17 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         ]);
 
         if (!$result['ok'] || empty($result['data']['order_id'])) {
-            $order->add_order_note(sprintf('Покупка частинами: не вдалося створити заявку (%d) %s [trace %s]', $result['code'], $result['error'], $result['trace']));
-            wc_add_notice('Не вдалося створити заявку на Покупку частинами. ' . ($result['error'] ?: 'Спробуйте пізніше або оберіть інший спосіб оплати.'), 'error');
+            /* translators: 1: HTTP code, 2: error from the bank, 3: bank trace id */
+            $order->add_order_note(sprintf(__('Installments: could not create the application (%1$d) %2$s [trace %3$s]', 'toloka-monobank'), $result['code'], $result['error'], $result['trace']));
+            wc_add_notice(__('Could not create the installments application.', 'toloka-monobank') . ' ' . ($result['error'] ?: __('Please try again later or choose another payment method.', 'toloka-monobank')), 'error');
             return ['result' => 'failure'];
         }
 
         $order->update_meta_data(self::META_ID, $result['data']['order_id']);
         $order->update_meta_data(self::META_PARTS, $parts);
         $order->set_transaction_id($result['data']['order_id']);
-        $order->update_status('on-hold', sprintf('Покупка частинами: заявку %s створено (%s), чекаємо підтвердження клієнта в застосунку.', $result['data']['order_id'], self::parts_label($parts, 0)));
+        /* translators: 1: bank application id, 2: number of payments, e.g. "3 payments" */
+        $order->update_status('on-hold', sprintf(__('Installments: application %1$s created (%2$s), waiting for the customer to confirm in the app.', 'toloka-monobank'), $result['data']['order_id'], self::parts_label($parts, 0)));
         WC()->cart->empty_cart();
 
         return ['result' => 'success', 'redirect' => $this->get_return_url($order)];
@@ -189,7 +203,7 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         }
         $shipping = round((float) $order->get_shipping_total() + (float) $order->get_shipping_tax(), 2);
         if ($shipping > 0) {
-            $products[] = ['name' => 'Доставка', 'count' => 1, 'sum' => $shipping];
+            $products[] = ['name' => __('Shipping', 'toloka-monobank'), 'count' => 1, 'sum' => $shipping];
         }
         foreach ($order->get_fees() as $fee) {
             $products[] = ['name' => $fee->get_name(), 'count' => 1, 'sum' => round((float) $fee->get_total() + (float) $fee->get_total_tax(), 2)];
@@ -204,7 +218,8 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
             $sum += $p['count'] * $p['sum'];
         }
         if (abs($sum - (float) $order->get_total()) >= 0.01) {
-            $products = [['name' => 'Замовлення №' . $order->get_order_number(), 'count' => 1, 'sum' => round((float) $order->get_total(), 2)]];
+            /* translators: %s: order number */
+            $products = [['name' => sprintf(__('Order #%s', 'toloka-monobank'), $order->get_order_number()), 'count' => 1, 'sum' => round((float) $order->get_total(), 2)]];
         }
         return $products;
     }
@@ -212,7 +227,8 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
     public function thankyou_page($order_id) {
         $order = wc_get_order($order_id);
         if ($order && $order->has_status('on-hold')) {
-            echo '<p><strong>Підтвердіть Покупку частинами в застосунку monobank протягом 15 хвилин.</strong> Ми отримаємо сповіщення автоматично.</p>';
+            echo '<p><strong>' . esc_html__('Confirm the installments in the monobank app within 15 minutes.', 'toloka-monobank') . '</strong> '
+                . esc_html__('We will get the notification automatically.', 'toloka-monobank') . '</p>';
         }
     }
 
@@ -226,14 +242,15 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
         if ($full === 'IN_PROCESS/WAITING_FOR_STORE_CONFIRM') {
             if (!$order->is_paid()) {
-                $order->add_order_note('Покупка частинами: клієнт підтвердив. Відправте товар і переведіть замовлення у «Виконано» — тоді банк підтвердить покупку.');
+                $order->add_order_note(__('Installments: the customer confirmed. Ship the order and set it to Completed, then the bank confirms the purchase.', 'toloka-monobank'));
                 $order->payment_complete($order->get_meta(self::META_ID));
             }
             return;
         }
 
         if ($state === 'FAIL') {
-            $note = 'Покупка частинами: відмова — ' . (self::FAIL_REASONS[$sub_state] ?? $sub_state) . '.';
+            /* translators: %s: reason, e.g. "the customer declined" */
+            $note = sprintf(__('Installments: declined, %s.', 'toloka-monobank'), self::fail_reason($sub_state));
             if ($order->has_status(['on-hold', 'pending'])) {
                 $order->update_status('cancelled', $note);
             } else {
@@ -243,12 +260,13 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         }
 
         $labels = [
-            'IN_PROCESS/WAITING_FOR_CLIENT' => 'чекаємо підтвердження клієнта',
-            'SUCCESS/ACTIVE'                => 'покупку підтверджено, розстрочка активна',
-            'SUCCESS/DONE'                  => 'клієнт повністю сплатив',
-            'SUCCESS/RETURNED'              => 'товар повернено, кошти повернуто клієнту',
+            'IN_PROCESS/WAITING_FOR_CLIENT' => __('waiting for the customer to confirm', 'toloka-monobank'),
+            'SUCCESS/ACTIVE'                => __('purchase confirmed, installments are active', 'toloka-monobank'),
+            'SUCCESS/DONE'                  => __('the customer has paid in full', 'toloka-monobank'),
+            'SUCCESS/RETURNED'              => __('goods returned, money sent back to the customer', 'toloka-monobank'),
         ];
-        $order->add_order_note('Покупка частинами: ' . ($labels[$full] ?? $full) . '.');
+        /* translators: %s: status, e.g. "the customer has paid in full" */
+        $order->add_order_note(sprintf(__('Installments: %s.', 'toloka-monobank'), $labels[$full] ?? $full));
     }
 
     public function sync_order($order) {
@@ -271,16 +289,18 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         $state = (string) $order->get_meta(self::META_STATE);
         if ($state !== 'IN_PROCESS/WAITING_FOR_STORE_CONFIRM') {
             if (strpos($state, 'SUCCESS/') !== 0) {
-                $order->add_order_note('Покупка частинами: УВАГА — замовлення у «Виконано», але заявка в статусі ' . ($state ?: 'невідомо') . ', банк не підтверджено.');
+                /* translators: %s: bank application state */
+                $order->add_order_note(sprintf(__('Installments: WARNING, the order is Completed but the application is in state %s, so the bank was not confirmed.', 'toloka-monobank'), $state ?: __('unknown', 'toloka-monobank')));
             }
             return;
         }
         $result = $this->api()->confirm($id);
         if (!$result['ok']) {
-            $order->add_order_note(sprintf('Покупка частинами: ПОМИЛКА підтвердження (%d) %s [trace %s]. Перевірте заявку в кабінеті monobank.', $result['code'], $result['error'], $result['trace']));
+            /* translators: 1: HTTP code, 2: error from the bank, 3: bank trace id */
+            $order->add_order_note(sprintf(__('Installments: ERROR confirming (%1$d) %2$s [trace %3$s]. Check the application in your monobank account.', 'toloka-monobank'), $result['code'], $result['error'], $result['trace']));
             return;
         }
-        $order->add_order_note('Покупка частинами: відправку товару підтверджено в monobank.');
+        $order->add_order_note(__('Installments: shipping confirmed at monobank.', 'toloka-monobank'));
         if (!empty($result['data']['state'])) {
             $this->handle_state($order, $result['data']['state'], $result['data']['order_sub_state'] ?? '');
         }
@@ -299,28 +319,30 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         }
         $result = $this->api()->reject($id);
         $order->add_order_note($result['ok']
-            ? 'Покупка частинами: заявку скасовано в monobank.'
-            : sprintf('Покупка частинами: ПОМИЛКА скасування (%d) %s [trace %s].', $result['code'], $result['error'], $result['trace']));
+            ? __('Installments: application cancelled at monobank.', 'toloka-monobank')
+            /* translators: 1: HTTP code, 2: error from the bank, 3: bank trace id */
+            : sprintf(__('Installments: ERROR cancelling (%1$d) %2$s [trace %3$s].', 'toloka-monobank'), $result['code'], $result['error'], $result['trace']));
     }
 
     public function process_refund($order_id, $amount = null, $reason = '') {
         $order = wc_get_order($order_id);
         $id    = $order ? $order->get_meta(self::META_ID) : '';
         if (!$id || !$amount) {
-            return new WP_Error('toloka_chast', 'Немає заявки Покупки частинами або суми повернення.');
+            return new WP_Error('toloka_chast', __('No installments application or refund amount.', 'toloka-monobank'));
         }
         if (strpos((string) $order->get_meta(self::META_STATE), 'SUCCESS/') !== 0) {
             $this->sync_order($order);
         }
         if (strpos((string) $order->get_meta(self::META_STATE), 'SUCCESS/') !== 0) {
-            return new WP_Error('toloka_chast', 'Повернення можливе лише після «Виконано». Якщо товар ще не відправлено — скасуйте замовлення.');
+            return new WP_Error('toloka_chast', __('A refund is only possible after the order is Completed. If you have not shipped yet, cancel the order instead.', 'toloka-monobank'));
         }
         $return_id = $order->get_id() . '-R' . time();
         $result    = $this->api()->return_order($id, $return_id, $amount);
         if (!$result['ok']) {
             return new WP_Error('toloka_chast', sprintf('monobank: %s [trace %s]', $result['error'] ?: $result['code'], $result['trace']));
         }
-        $order->add_order_note(sprintf('Покупка частинами: повернення %s (%s) відправлено в monobank. %s', wc_price($amount), $return_id, $reason));
+        /* translators: 1: amount, 2: refund id, 3: refund reason */
+        $order->add_order_note(sprintf(__('Installments: refund of %1$s (%2$s) sent to monobank. %3$s', 'toloka-monobank'), wc_price($amount), $return_id, $reason));
         return true;
     }
 
@@ -332,7 +354,8 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
         $price = (float) wc_get_price_to_display($product);
         $parts = $this->get_parts();
         if ($price > 0 && $this->fits_total($price)) {
-            printf('<p class="toloka-chast-product">Покупка частинами monobank: %s</p>', esc_html(self::parts_label(end($parts), $price)));
+            /* translators: %s: e.g. "4 payments of ~672 UAH" */
+            printf('<p class="toloka-chast-product">%s</p>', esc_html(sprintf(__('monobank installments: %s', 'toloka-monobank'), self::parts_label(end($parts), $price))));
         }
     }
 }
