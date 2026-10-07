@@ -8,6 +8,8 @@ A free WooCommerce plugin that adds what the official "plata by mono" plugin is 
 
 Card payments stay with the official plugin. Toloka works next to it.
 
+Free and open source. There is no paid version, and none is planned.
+
 User guides in Ukrainian and English will be on the tolokacode docs site.
 
 ## Installation

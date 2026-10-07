@@ -19,6 +19,7 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
 
     public function init_form_fields() {
         parent::init_form_fields();
+        $this->form_fields['prepay'] = ['title' => __('Prepayment through plata by mono', 'toloka-monobank'), 'type' => 'title'];
         $this->form_fields['prepay_type'] = [
             'title'   => __('Prepayment', 'toloka-monobank'),
             'type'    => 'select',
@@ -36,6 +37,13 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
             'type'        => 'password',
             'description' => __('Leave empty to use the token from the official "plata by mono" plugin.', 'toloka-monobank'),
         ];
+    }
+
+    public function admin_options() {
+        toloka_monobank_header();
+        echo '<div class="toloka-ui">';
+        parent::admin_options();
+        echo '</div>';
     }
 
     public function get_token() {
