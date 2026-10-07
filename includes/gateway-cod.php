@@ -20,21 +20,21 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
     public function init_form_fields() {
         parent::init_form_fields();
         $this->form_fields['prepay_type'] = [
-            'title'   => 'Передоплата',
+            'title'   => __('Prepayment', 'toloka-monobank'),
             'type'    => 'select',
             'default' => 'fixed',
-            'options' => ['fixed' => 'Фіксована сума, грн', 'percent' => 'Відсоток від замовлення, %'],
+            'options' => ['fixed' => __('Fixed amount, UAH', 'toloka-monobank'), 'percent' => __('Percent of the order, %', 'toloka-monobank')],
         ];
         $this->form_fields['prepay_amount'] = [
-            'title'       => 'Розмір передоплати',
+            'title'       => __('Prepayment size', 'toloka-monobank'),
             'type'        => 'number',
             'default'     => '0',
-            'description' => '0 — без передоплати (звичайний накладений платіж).',
+            'description' => __('0 means no prepayment (regular cash on delivery).', 'toloka-monobank'),
         ];
         $this->form_fields['mono_token'] = [
-            'title'       => 'Токен plata by mono',
+            'title'       => __('plata by mono token', 'toloka-monobank'),
             'type'        => 'password',
-            'description' => 'Порожньо — береться токен з офіційного плагіна «plata by mono».',
+            'description' => __('Leave empty to use the token from the official "plata by mono" plugin.', 'toloka-monobank'),
         ];
     }
 
@@ -82,7 +82,8 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
             'ccy'              => 980,
             'merchantPaymInfo' => [
                 'reference'   => (string) $order->get_id(),
-                'destination' => 'Передоплата за замовлення №' . $order->get_order_number(),
+                /* translators: %s: order number */
+                'destination' => sprintf(__('Prepayment for order #%s', 'toloka-monobank'), $order->get_order_number()),
             ],
             'redirectUrl'      => $this->get_return_url($order),
             'webHookUrl'       => add_query_arg('wc-api', 'toloka_prepay', home_url('/')),
@@ -90,8 +91,9 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
         ]);
 
         if (empty($result['data']['invoiceId']) || empty($result['data']['pageUrl'])) {
-            $order->add_order_note(sprintf('Передоплата: не вдалося створити рахунок (%d) %s', $result['code'], $result['data']['errText'] ?? ''));
-            wc_add_notice('Не вдалося створити рахунок на передоплату. Спробуйте ще раз або оберіть інший спосіб оплати.', 'error');
+            /* translators: 1: HTTP code, 2: error from the bank */
+            $order->add_order_note(sprintf(__('Prepayment: could not create the invoice (%1$d) %2$s', 'toloka-monobank'), $result['code'], $result['data']['errText'] ?? ''));
+            wc_add_notice(__('Could not create the prepayment invoice. Please try again or choose another payment method.', 'toloka-monobank'), 'error');
             return ['result' => 'failure'];
         }
 
@@ -99,7 +101,8 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
         $order->update_meta_data(self::META_AMOUNT, $prepay);
         $order->update_meta_data(self::META_PAID, 'no');
         $order->delete_meta_data(self::META_STATUS);
-        $order->add_order_note(sprintf('Передоплата: рахунок %s на %s створено, чекаємо оплату.', $result['data']['invoiceId'], wc_price($prepay)));
+        /* translators: 1: invoice id, 2: amount */
+        $order->add_order_note(sprintf(__('Prepayment: invoice %1$s for %2$s created, waiting for payment.', 'toloka-monobank'), $result['data']['invoiceId'], wc_price($prepay)));
         $order->save();
 
         return ['result' => 'success', 'redirect' => $result['data']['pageUrl']];
@@ -122,11 +125,13 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
         $expected = (int) round((float) $order->get_meta(self::META_AMOUNT) * 100);
         if ($status === 'success' && (int) ($result['data']['amount'] ?? 0) === $expected) {
             $order->update_meta_data(self::META_PAID, 'yes');
-            $order->add_order_note(sprintf('Передоплату %s отримано. При отриманні (накладений платіж): %s.', wc_price($expected / 100), wc_price(self::rest_for($order))));
+            /* translators: 1: prepayment amount, 2: amount to pay on delivery */
+            $order->add_order_note(sprintf(__('Prepayment of %1$s received. To pay on delivery: %2$s.', 'toloka-monobank'), wc_price($expected / 100), wc_price(self::rest_for($order))));
             $order->payment_complete($invoice);
         } elseif (in_array($status, ['failure', 'expired', 'reversed'], true)) {
             $reason = $result['data']['failureReason'] ?? '';
-            $order->add_order_note('Передоплата: рахунок у статусі ' . $status . ($reason ? ' — ' . $reason : '') . '.');
+            /* translators: 1: invoice status, 2: reason from the bank (may be empty) */
+            $order->add_order_note(trim(sprintf(__('Prepayment: invoice status is %1$s. %2$s', 'toloka-monobank'), $status, $reason)));
         }
     }
 
@@ -145,10 +150,12 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
             $this->sync($order);
             $amount = wc_price((float) $order->get_meta(self::META_AMOUNT));
             if ($order->get_meta(self::META_PAID) === 'yes') {
-                printf('<p><strong>Передоплату %s отримано.</strong> При отриманні сплатите %s.</p>', $amount, wc_price(self::rest_for($order)));
+                /* translators: 1: prepayment amount, 2: amount to pay on delivery */
+                printf('<p>' . wp_kses_post(__('<strong>Prepayment of %1$s received.</strong> You will pay %2$s on delivery.', 'toloka-monobank')) . '</p>', $amount, wc_price(self::rest_for($order)));
             } else {
-                printf('<p><strong>Передоплату ще не отримано.</strong> Замовлення буде прийнято в роботу після оплати %s.</p><p><a class="button" href="%s">Сплатити передоплату</a></p>',
-                    $amount, esc_url($order->get_checkout_payment_url()));
+                /* translators: %s: prepayment amount */
+                printf('<p>' . wp_kses_post(__('<strong>The prepayment has not arrived yet.</strong> We will start on your order once %s is paid.', 'toloka-monobank')) . '</p>', $amount);
+                printf('<p><a class="button" href="%s">%s</a></p>', esc_url($order->get_checkout_payment_url()), esc_html__('Pay the prepayment', 'toloka-monobank'));
             }
         }
         parent::thankyou_page();
@@ -203,8 +210,8 @@ add_filter('woocommerce_get_order_item_totals', function ($rows, $order) {
     }
     $paid  = $order->get_meta(Toloka_Gateway_COD::META_PAID) === 'yes';
     $extra = [
-        'toloka_prepay' => ['label' => 'Передоплата онлайн:', 'value' => wc_price($amount) . ($paid ? ' (сплачено)' : ' (не сплачено)')],
-        'toloka_rest'   => ['label' => 'При отриманні:', 'value' => wc_price(Toloka_Gateway_COD::rest_for($order))],
+        'toloka_prepay' => ['label' => __('Online prepayment:', 'toloka-monobank'), 'value' => wc_price($amount) . ' ' . ($paid ? __('(paid)', 'toloka-monobank') : __('(not paid)', 'toloka-monobank'))],
+        'toloka_rest'   => ['label' => __('To pay on delivery:', 'toloka-monobank'), 'value' => wc_price(Toloka_Gateway_COD::rest_for($order))],
     ];
     $pos = array_search('order_total', array_keys($rows), true);
     return $pos === false ? $rows + $extra : array_slice($rows, 0, $pos + 1, true) + $extra + array_slice($rows, $pos + 1, null, true);
@@ -218,6 +225,8 @@ add_action('woocommerce_admin_order_totals_after_total', function ($order_id) {
         return;
     }
     $paid = $order->get_meta(Toloka_Gateway_COD::META_PAID) === 'yes';
-    printf('<tr><td class="label">Передоплата онлайн:</td><td width="1%%"></td><td class="total">%s %s</td></tr>', wc_price($amount), $paid ? '✅' : '❌ не сплачено');
-    printf('<tr><td class="label"><strong>Накладений платіж (ТТН):</strong></td><td width="1%%"></td><td class="total"><strong>%s</strong></td></tr>', wc_price(Toloka_Gateway_COD::rest_for($order)));
+    printf('<tr><td class="label">%s</td><td width="1%%"></td><td class="total">%s %s</td></tr>',
+        esc_html__('Online prepayment:', 'toloka-monobank'), wc_price($amount), $paid ? '✅' : '❌ ' . esc_html__('not paid', 'toloka-monobank'));
+    printf('<tr><td class="label"><strong>%s</strong></td><td width="1%%"></td><td class="total"><strong>%s</strong></td></tr>',
+        esc_html__('Cash on delivery (waybill):', 'toloka-monobank'), wc_price(Toloka_Gateway_COD::rest_for($order)));
 });

@@ -39,6 +39,19 @@ For the prepayment, use a test plata by mono token from your monobank business a
 
 Logs are in WooCommerce > Status > Logs, under `toloka-chast` and `toloka-prepay`.
 
+## Translations
+
+Texts in the code are in English. The Ukrainian translation is in `languages/`, and WordPress
+picks it automatically when the site language is Ukrainian.
+
+After you add or change a text, update the files with [WP-CLI](https://wp-cli.org/):
+
+```bash
+wp i18n make-pot . languages/toloka-monobank.pot
+# add the new texts to languages/toloka-monobank-uk.po (Poedit or any text editor)
+wp i18n make-mo languages
+```
+
 ## Contributing
 
 See the [contributing guide](https://github.com/tolokacode/.github/blob/main/CONTRIBUTING.md).

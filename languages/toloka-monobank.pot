@@ -1,0 +1,421 @@
+# Copyright (C) 2026 tolokacode
+# This file is distributed under the EUPL-1.2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Toloka for monobank 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/tolokacode/toloka-monobank/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-06T20:53:58+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: toloka-monobank\n"
+
+#. Plugin Name of the plugin
+#: toloka-monobank.php
+msgid "Toloka for monobank"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: toloka-monobank.php
+msgid "https://github.com/tolokacode/toloka-monobank"
+msgstr ""
+
+#. Description of the plugin
+#: toloka-monobank.php
+msgid "monobank installments (Покупка частинами) and cash on delivery with online prepayment. Works alongside the official \"plata by mono\" plugin."
+msgstr ""
+
+#. Author of the plugin
+#: toloka-monobank.php
+msgid "tolokacode"
+msgstr ""
+
+#: includes/gateway-chast.php:22
+#: includes/gateway-chast.php:39
+msgid "monobank installments"
+msgstr ""
+
+#: includes/gateway-chast.php:23
+msgid "Pay in installments through the monobank API. Statuses: On hold, then Processing, then Completed (after shipping)."
+msgstr ""
+
+#: includes/gateway-chast.php:38
+msgid "Enable"
+msgstr ""
+
+#: includes/gateway-chast.php:38
+msgid "Enable monobank installments"
+msgstr ""
+
+#: includes/gateway-chast.php:39
+msgid "Title"
+msgstr ""
+
+#: includes/gateway-chast.php:40
+msgid "Description"
+msgstr ""
+
+#: includes/gateway-chast.php:40
+msgid "No overpayment. After placing the order, confirm the purchase in the monobank app."
+msgstr ""
+
+#: includes/gateway-chast.php:42
+msgid "Environment"
+msgstr ""
+
+#: includes/gateway-chast.php:46
+msgid "Sandbox (test)"
+msgstr ""
+
+#: includes/gateway-chast.php:47
+msgid "Stage (test with the real app)"
+msgstr ""
+
+#: includes/gateway-chast.php:48
+msgid "Production"
+msgstr ""
+
+#: includes/gateway-chast.php:50
+msgid "Sandbox: Store ID <code>test_store_with_confirm</code>, secret <code>secret_98765432--123-123</code>. A phone number ending in 4 is approved."
+msgstr ""
+
+#: includes/gateway-chast.php:52
+msgid "Store ID"
+msgstr ""
+
+#: includes/gateway-chast.php:53
+msgid "Secret key"
+msgstr ""
+
+#: includes/gateway-chast.php:54
+#: includes/gateway-chast.php:118
+msgid "Number of payments"
+msgstr ""
+
+#: includes/gateway-chast.php:54
+msgid "Comma separated, from 3 to 25. Must match your contract with the bank."
+msgstr ""
+
+#: includes/gateway-chast.php:55
+msgid "Minimum amount, UAH"
+msgstr ""
+
+#: includes/gateway-chast.php:56
+msgid "Maximum amount, UAH"
+msgstr ""
+
+#: includes/gateway-chast.php:56
+msgid "Leave empty for no limit."
+msgstr ""
+
+#: includes/gateway-chast.php:57
+msgid "Product page"
+msgstr ""
+
+#: includes/gateway-chast.php:57
+msgid "Show \"N payments of X\" under the price"
+msgstr ""
+
+#. translators: %d: number of payments
+#: includes/gateway-chast.php:91
+#, php-format
+msgid "%d payment"
+msgid_plural "%d payments"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of payments, 2: amount of one payment
+#: includes/gateway-chast.php:94
+#, php-format
+msgid "%1$d payment of ~%2$s"
+msgid_plural "%1$d payments of ~%2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/gateway-chast.php:99
+msgid "the customer is not a monobank client"
+msgstr ""
+
+#: includes/gateway-chast.php:100
+msgid "the customer's installments limit is too low"
+msgstr ""
+
+#: includes/gateway-chast.php:101
+msgid "the customer has another open application"
+msgstr ""
+
+#: includes/gateway-chast.php:102
+msgid "not enough money for the first payment"
+msgstr ""
+
+#: includes/gateway-chast.php:103
+msgid "the customer declined"
+msgstr ""
+
+#: includes/gateway-chast.php:104
+msgid "this number of payments is not allowed"
+msgstr ""
+
+#: includes/gateway-chast.php:105
+msgid "declined by the bank's fraud check"
+msgstr ""
+
+#: includes/gateway-chast.php:106
+msgid "declined by the bank's risk rules"
+msgstr ""
+
+#: includes/gateway-chast.php:107
+msgid "the customer did not confirm within 15 minutes"
+msgstr ""
+
+#: includes/gateway-chast.php:108
+msgid "cancelled by the shop"
+msgstr ""
+
+#: includes/gateway-chast.php:109
+msgid "internal bank error"
+msgstr ""
+
+#: includes/gateway-chast.php:127
+msgid "Choose the number of payments."
+msgstr ""
+
+#: includes/gateway-chast.php:131
+msgid "For monobank installments, enter a Ukrainian phone number linked to monobank."
+msgstr ""
+
+#. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
+#: includes/gateway-chast.php:178
+#, php-format
+msgid "Installments: could not create the application (%1$d) %2$s [trace %3$s]"
+msgstr ""
+
+#: includes/gateway-chast.php:179
+msgid "Could not create the installments application."
+msgstr ""
+
+#: includes/gateway-chast.php:179
+msgid "Please try again later or choose another payment method."
+msgstr ""
+
+#. translators: 1: bank application id, 2: number of payments, e.g. "3 payments"
+#: includes/gateway-chast.php:187
+#, php-format
+msgid "Installments: application %1$s created (%2$s), waiting for the customer to confirm in the app."
+msgstr ""
+
+#: includes/gateway-chast.php:206
+msgid "Shipping"
+msgstr ""
+
+#. translators: %s: order number
+#: includes/gateway-chast.php:222
+#, php-format
+msgid "Order #%s"
+msgstr ""
+
+#: includes/gateway-chast.php:230
+msgid "Confirm the installments in the monobank app within 15 minutes."
+msgstr ""
+
+#: includes/gateway-chast.php:231
+msgid "We will get the notification automatically."
+msgstr ""
+
+#: includes/gateway-chast.php:245
+msgid "Installments: the customer confirmed. Ship the order and set it to Completed, then the bank confirms the purchase."
+msgstr ""
+
+#. translators: %s: reason, e.g. "the customer declined"
+#: includes/gateway-chast.php:253
+#, php-format
+msgid "Installments: declined, %s."
+msgstr ""
+
+#: includes/gateway-chast.php:263
+msgid "waiting for the customer to confirm"
+msgstr ""
+
+#: includes/gateway-chast.php:264
+msgid "purchase confirmed, installments are active"
+msgstr ""
+
+#: includes/gateway-chast.php:265
+msgid "the customer has paid in full"
+msgstr ""
+
+#: includes/gateway-chast.php:266
+msgid "goods returned, money sent back to the customer"
+msgstr ""
+
+#. translators: %s: status, e.g. "the customer has paid in full"
+#: includes/gateway-chast.php:269
+#, php-format
+msgid "Installments: %s."
+msgstr ""
+
+#. translators: %s: bank application state
+#: includes/gateway-chast.php:293
+#, php-format
+msgid "Installments: WARNING, the order is Completed but the application is in state %s, so the bank was not confirmed."
+msgstr ""
+
+#. translators: %s: bank application state
+#: includes/gateway-chast.php:293
+msgid "unknown"
+msgstr ""
+
+#. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
+#: includes/gateway-chast.php:300
+#, php-format
+msgid "Installments: ERROR confirming (%1$d) %2$s [trace %3$s]. Check the application in your monobank account."
+msgstr ""
+
+#: includes/gateway-chast.php:303
+msgid "Installments: shipping confirmed at monobank."
+msgstr ""
+
+#: includes/gateway-chast.php:322
+msgid "Installments: application cancelled at monobank."
+msgstr ""
+
+#. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
+#: includes/gateway-chast.php:324
+#, php-format
+msgid "Installments: ERROR cancelling (%1$d) %2$s [trace %3$s]."
+msgstr ""
+
+#: includes/gateway-chast.php:331
+msgid "No installments application or refund amount."
+msgstr ""
+
+#: includes/gateway-chast.php:337
+msgid "A refund is only possible after the order is Completed. If you have not shipped yet, cancel the order instead."
+msgstr ""
+
+#. translators: 1: amount, 2: refund id, 3: refund reason
+#: includes/gateway-chast.php:345
+#, php-format
+msgid "Installments: refund of %1$s (%2$s) sent to monobank. %3$s"
+msgstr ""
+
+#. translators: %s: e.g. "4 payments of ~672 UAH"
+#: includes/gateway-chast.php:358
+#, php-format
+msgid "monobank installments: %s"
+msgstr ""
+
+#: includes/gateway-cod.php:23
+msgid "Prepayment"
+msgstr ""
+
+#: includes/gateway-cod.php:26
+msgid "Fixed amount, UAH"
+msgstr ""
+
+#: includes/gateway-cod.php:26
+msgid "Percent of the order, %"
+msgstr ""
+
+#: includes/gateway-cod.php:29
+msgid "Prepayment size"
+msgstr ""
+
+#: includes/gateway-cod.php:32
+msgid "0 means no prepayment (regular cash on delivery)."
+msgstr ""
+
+#: includes/gateway-cod.php:35
+msgid "plata by mono token"
+msgstr ""
+
+#: includes/gateway-cod.php:37
+msgid "Leave empty to use the token from the official \"plata by mono\" plugin."
+msgstr ""
+
+#. translators: %s: order number
+#: includes/gateway-cod.php:86
+#, php-format
+msgid "Prepayment for order #%s"
+msgstr ""
+
+#. translators: 1: HTTP code, 2: error from the bank
+#: includes/gateway-cod.php:95
+#, php-format
+msgid "Prepayment: could not create the invoice (%1$d) %2$s"
+msgstr ""
+
+#: includes/gateway-cod.php:96
+msgid "Could not create the prepayment invoice. Please try again or choose another payment method."
+msgstr ""
+
+#. translators: 1: invoice id, 2: amount
+#: includes/gateway-cod.php:105
+#, php-format
+msgid "Prepayment: invoice %1$s for %2$s created, waiting for payment."
+msgstr ""
+
+#. translators: 1: prepayment amount, 2: amount to pay on delivery
+#: includes/gateway-cod.php:129
+#, php-format
+msgid "Prepayment of %1$s received. To pay on delivery: %2$s."
+msgstr ""
+
+#. translators: 1: invoice status, 2: reason from the bank (may be empty)
+#: includes/gateway-cod.php:134
+#, php-format
+msgid "Prepayment: invoice status is %1$s. %2$s"
+msgstr ""
+
+#. translators: 1: prepayment amount, 2: amount to pay on delivery
+#: includes/gateway-cod.php:154
+#, php-format
+msgid "<strong>Prepayment of %1$s received.</strong> You will pay %2$s on delivery."
+msgstr ""
+
+#. translators: %s: prepayment amount
+#: includes/gateway-cod.php:157
+#, php-format
+msgid "<strong>The prepayment has not arrived yet.</strong> We will start on your order once %s is paid."
+msgstr ""
+
+#: includes/gateway-cod.php:158
+msgid "Pay the prepayment"
+msgstr ""
+
+#: includes/gateway-cod.php:213
+#: includes/gateway-cod.php:229
+msgid "Online prepayment:"
+msgstr ""
+
+#: includes/gateway-cod.php:213
+msgid "(paid)"
+msgstr ""
+
+#: includes/gateway-cod.php:213
+msgid "(not paid)"
+msgstr ""
+
+#: includes/gateway-cod.php:214
+msgid "To pay on delivery:"
+msgstr ""
+
+#: includes/gateway-cod.php:229
+msgid "not paid"
+msgstr ""
+
+#: includes/gateway-cod.php:231
+msgid "Cash on delivery (waybill):"
+msgstr ""
+
+#: toloka-monobank.php:85
+msgid "Installments"
+msgstr ""
+
+#: toloka-monobank.php:86
+msgid "Cash on delivery"
+msgstr ""
