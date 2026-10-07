@@ -8,7 +8,10 @@
  * License: EUPL-1.2
  * License URI: https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
  * Requires PHP: 7.4
+ * Requires at least: 6.5
  * Requires Plugins: woocommerce
+ * WC requires at least: 8.0
+ * WC tested up to: 11.1
  * Text Domain: toloka-monobank
  * Domain Path: /languages
  */
@@ -59,8 +62,8 @@ function toloka_monobank_header() {
     ]);
 }
 
-add_action('admin_enqueue_scripts', function () {
-    if (($_GET['page'] ?? '') === 'wc-settings' && in_array($_GET['section'] ?? '', ['toloka_chast', 'cod'], true)) {
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook === 'woocommerce_page_wc-settings') {
         toloka_ui_enqueue();
     }
 });

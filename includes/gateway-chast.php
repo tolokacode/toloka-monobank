@@ -123,21 +123,23 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
     public function payment_fields() {
         if ($this->description) {
-            echo wpautop(wp_kses_post($this->description));
+            echo wp_kses_post(wpautop($this->description));
         }
         echo '<p class="form-row form-row-wide"><label for="toloka_chast_parts">' . esc_html__('Number of payments', 'toloka-monobank') . '</label><select name="toloka_chast_parts" id="toloka_chast_parts">';
         foreach ($this->get_parts() as $p) {
-            printf('<option value="%d">%s</option>', $p, esc_html(self::parts_label($p, $this->get_order_total())));
+            echo '<option value="' . esc_attr($p) . '">' . esc_html(self::parts_label($p, $this->get_order_total())) . '</option>';
         }
         echo '</select></p>';
     }
 
     public function validate_fields() {
-        if (!in_array((int) ($_POST['toloka_chast_parts'] ?? 0), $this->get_parts(), true)) {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
+        if (!in_array(absint(wp_unslash($_POST['toloka_chast_parts'] ?? 0)), $this->get_parts(), true)) {
             wc_add_notice(__('Choose the number of payments.', 'toloka-monobank'), 'error');
             return false;
         }
-        $phone = isset($_POST['billing_phone']) ? wc_clean(wp_unslash($_POST['billing_phone'])) : (WC()->customer ? WC()->customer->get_billing_phone() : '');
+        $phone = isset($_POST['billing_phone']) ? sanitize_text_field(wp_unslash($_POST['billing_phone'])) : (WC()->customer ? WC()->customer->get_billing_phone() : '');
+        // phpcs:enable
         if (!self::normalize_phone($phone)) {
             wc_add_notice(__('For monobank installments, enter a Ukrainian phone number linked to monobank.', 'toloka-monobank'), 'error');
             return false;
@@ -161,7 +163,8 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
     public function process_payment($order_id) {
         $order = wc_get_order($order_id);
-        $parts = (int) ($_POST['toloka_chast_parts'] ?? 0);
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce.
+        $parts = absint(wp_unslash($_POST['toloka_chast_parts'] ?? 0));
         if (!in_array($parts, $this->get_parts(), true)) {
             $parts = $this->get_parts()[0];
         }

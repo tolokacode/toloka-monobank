@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build zip
+        run: |
+          mkdir -p build/toloka-monobank
+          rsync -a --exclude-from=.distignore ./ build/toloka-monobank/
+          cd build && zip -qr toloka-monobank.zip toloka-monobank
+      - name: Create release
+        run: gh release create "$GITHUB_REF_NAME" build/toloka-monobank.zip --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
