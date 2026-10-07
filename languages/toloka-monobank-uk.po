@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Toloka for monobank 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/tolokacode/toloka-monobank/issues\n"
+"POT-Creation-Date: 2026-10-07T08:41:16+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T20:53:58+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: toloka-monobank\n"
-"Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Plugin Name of the plugin
@@ -36,8 +36,8 @@ msgstr "Покупка частинами monobank і накладений пл�
 msgid "tolokacode"
 msgstr "tolokacode"
 
-#: includes/gateway-chast.php:22
-#: includes/gateway-chast.php:39
+#: includes/gateway-chast.php:22 includes/gateway-chast.php:40
+#: assets/js/chast-block.js:9
 msgid "monobank installments"
 msgstr "Покупка частинами monobank"
 
@@ -46,84 +46,96 @@ msgid "Pay in installments through the monobank API. Statuses: On hold, then Pro
 msgstr "Оплата частинами через API monobank. Статуси: «На утриманні», потім «В обробці», потім «Виконано» (після відправки товару)."
 
 #: includes/gateway-chast.php:38
+msgid "General"
+msgstr "Загальне"
+
+#: includes/gateway-chast.php:39
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: includes/gateway-chast.php:38
+#: includes/gateway-chast.php:39
 msgid "Enable monobank installments"
 msgstr "Увімкнути Покупку частинами"
 
-#: includes/gateway-chast.php:39
+#: includes/gateway-chast.php:40
 msgid "Title"
 msgstr "Назва"
 
-#: includes/gateway-chast.php:40
+#: includes/gateway-chast.php:41
 msgid "Description"
 msgstr "Опис"
 
-#: includes/gateway-chast.php:40
+#: includes/gateway-chast.php:41
 msgid "No overpayment. After placing the order, confirm the purchase in the monobank app."
 msgstr "Без переплат. Після оформлення підтвердіть покупку в застосунку monobank."
 
 #: includes/gateway-chast.php:42
+msgid "Connection to monobank"
+msgstr "Підключення до monobank"
+
+#: includes/gateway-chast.php:44
 msgid "Environment"
 msgstr "Середовище"
 
-#: includes/gateway-chast.php:46
+#: includes/gateway-chast.php:48
 msgid "Sandbox (test)"
 msgstr "Пісочниця (тест)"
 
-#: includes/gateway-chast.php:47
+#: includes/gateway-chast.php:49
 msgid "Stage (test with the real app)"
 msgstr "Stage (тест зі справжнім застосунком)"
 
-#: includes/gateway-chast.php:48
+#: includes/gateway-chast.php:50
 msgid "Production"
 msgstr "Продакшн"
 
-#: includes/gateway-chast.php:50
-msgid "Sandbox: Store ID <code>test_store_with_confirm</code>, secret <code>secret_98765432--123-123</code>. A phone number ending in 4 is approved."
-msgstr "Пісочниця: Store ID <code>test_store_with_confirm</code>, ключ <code>secret_98765432--123-123</code>. Телефон, що закінчується на 4, буде схвалено."
-
 #: includes/gateway-chast.php:52
+msgid "Sandbox and Stage are for testing. Use Production for real orders."
+msgstr "Пісочниця і Stage — для тестування. Для справжніх замовлень оберіть «Продакшн»."
+
+#: includes/gateway-chast.php:54
 msgid "Store ID"
 msgstr "Store ID"
 
-#: includes/gateway-chast.php:53
+#: includes/gateway-chast.php:55
 msgid "Secret key"
 msgstr "Секретний ключ"
 
-#: includes/gateway-chast.php:54
-#: includes/gateway-chast.php:118
+#: includes/gateway-chast.php:56 toloka-monobank.php:106
+msgid "Installments"
+msgstr "Покупка частинами"
+
+#: includes/gateway-chast.php:57 includes/gateway-chast.php:128
+#: assets/js/chast-block.js:34
 msgid "Number of payments"
 msgstr "Кількість платежів"
 
-#: includes/gateway-chast.php:54
+#: includes/gateway-chast.php:57
 msgid "Comma separated, from 3 to 25. Must match your contract with the bank."
 msgstr "Через кому, від 3 до 25. Мають відповідати договору з банком."
 
-#: includes/gateway-chast.php:55
+#: includes/gateway-chast.php:58
 msgid "Minimum amount, UAH"
 msgstr "Мінімальна сума, грн"
 
-#: includes/gateway-chast.php:56
+#: includes/gateway-chast.php:59
 msgid "Maximum amount, UAH"
 msgstr "Максимальна сума, грн"
 
-#: includes/gateway-chast.php:56
+#: includes/gateway-chast.php:59
 msgid "Leave empty for no limit."
 msgstr "Порожньо означає без обмеження."
 
-#: includes/gateway-chast.php:57
+#: includes/gateway-chast.php:60
 msgid "Product page"
 msgstr "Сторінка товару"
 
-#: includes/gateway-chast.php:57
+#: includes/gateway-chast.php:60
 msgid "Show \"N payments of X\" under the price"
 msgstr "Показувати «N платежів по X ₴» під ціною"
 
 #. translators: %d: number of payments
-#: includes/gateway-chast.php:91
+#: includes/gateway-chast.php:101 assets/js/chast-block.js:14
 #, php-format
 msgid "%d payment"
 msgid_plural "%d payments"
@@ -132,7 +144,7 @@ msgstr[1] "%d платежі"
 msgstr[2] "%d платежів"
 
 #. translators: 1: number of payments, 2: amount of one payment
-#: includes/gateway-chast.php:94
+#: includes/gateway-chast.php:104 assets/js/chast-block.js:19
 #, php-format
 msgid "%1$d payment of ~%2$s"
 msgid_plural "%1$d payments of ~%2$s"
@@ -140,286 +152,297 @@ msgstr[0] "%1$d платіж по ~%2$s"
 msgstr[1] "%1$d платежі по ~%2$s"
 msgstr[2] "%1$d платежів по ~%2$s"
 
-#: includes/gateway-chast.php:99
+#: includes/gateway-chast.php:109
 msgid "the customer is not a monobank client"
 msgstr "клієнта не знайдено в monobank"
 
-#: includes/gateway-chast.php:100
+#: includes/gateway-chast.php:110
 msgid "the customer's installments limit is too low"
 msgstr "недостатній ліміт на Покупку частинами"
 
-#: includes/gateway-chast.php:101
+#: includes/gateway-chast.php:111
 msgid "the customer has another open application"
 msgstr "у клієнта є інша незавершена заявка"
 
-#: includes/gateway-chast.php:102
+#: includes/gateway-chast.php:112
 msgid "not enough money for the first payment"
 msgstr "недостатньо коштів для першого платежу"
 
-#: includes/gateway-chast.php:103
+#: includes/gateway-chast.php:113
 msgid "the customer declined"
 msgstr "клієнт відхилив заявку"
 
-#: includes/gateway-chast.php:104
+#: includes/gateway-chast.php:114
 msgid "this number of payments is not allowed"
 msgstr "неприйнятна кількість платежів"
 
-#: includes/gateway-chast.php:105
+#: includes/gateway-chast.php:115
 msgid "declined by the bank's fraud check"
 msgstr "відхилено антифрод-системою банку"
 
-#: includes/gateway-chast.php:106
+#: includes/gateway-chast.php:116
 msgid "declined by the bank's risk rules"
 msgstr "обмеження ризик-менеджменту банку"
 
-#: includes/gateway-chast.php:107
+#: includes/gateway-chast.php:117
 msgid "the customer did not confirm within 15 minutes"
 msgstr "клієнт не підтвердив за 15 хвилин"
 
-#: includes/gateway-chast.php:108
+#: includes/gateway-chast.php:118
 msgid "cancelled by the shop"
 msgstr "скасовано магазином"
 
-#: includes/gateway-chast.php:109
+#: includes/gateway-chast.php:119
 msgid "internal bank error"
 msgstr "внутрішня помилка банку"
 
-#: includes/gateway-chast.php:127
+#: includes/gateway-chast.php:137
 msgid "Choose the number of payments."
 msgstr "Оберіть кількість платежів."
 
-#: includes/gateway-chast.php:131
+#: includes/gateway-chast.php:142
 msgid "For monobank installments, enter a Ukrainian phone number linked to monobank."
 msgstr "Для Покупки частинами вкажіть український номер телефону, прив'язаний до monobank."
 
 #. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
-#: includes/gateway-chast.php:178
+#: includes/gateway-chast.php:189
 #, php-format
 msgid "Installments: could not create the application (%1$d) %2$s [trace %3$s]"
 msgstr "Покупка частинами: не вдалося створити заявку (%1$d) %2$s [trace %3$s]"
 
-#: includes/gateway-chast.php:179
+#: includes/gateway-chast.php:190
 msgid "Could not create the installments application."
 msgstr "Не вдалося створити заявку на Покупку частинами."
 
-#: includes/gateway-chast.php:179
+#: includes/gateway-chast.php:190
 msgid "Please try again later or choose another payment method."
 msgstr "Спробуйте пізніше або оберіть інший спосіб оплати."
 
 #. translators: 1: bank application id, 2: number of payments, e.g. "3 payments"
-#: includes/gateway-chast.php:187
+#: includes/gateway-chast.php:198
 #, php-format
 msgid "Installments: application %1$s created (%2$s), waiting for the customer to confirm in the app."
 msgstr "Покупка частинами: заявку %1$s створено (%2$s), чекаємо підтвердження клієнта в застосунку."
 
-#: includes/gateway-chast.php:206
+#: includes/gateway-chast.php:217
 msgid "Shipping"
 msgstr "Доставка"
 
 #. translators: %s: order number
-#: includes/gateway-chast.php:222
+#: includes/gateway-chast.php:233
 #, php-format
 msgid "Order #%s"
 msgstr "Замовлення №%s"
 
-#: includes/gateway-chast.php:230
+#: includes/gateway-chast.php:241
 msgid "Confirm the installments in the monobank app within 15 minutes."
 msgstr "Підтвердіть Покупку частинами в застосунку monobank протягом 15 хвилин."
 
-#: includes/gateway-chast.php:231
+#: includes/gateway-chast.php:242
 msgid "We will get the notification automatically."
 msgstr "Ми отримаємо сповіщення автоматично."
 
-#: includes/gateway-chast.php:245
+#: includes/gateway-chast.php:256
 msgid "Installments: the customer confirmed. Ship the order and set it to Completed, then the bank confirms the purchase."
 msgstr "Покупка частинами: клієнт підтвердив. Відправте товар і поставте замовленню «Виконано», тоді банк підтвердить покупку."
 
 #. translators: %s: reason, e.g. "the customer declined"
-#: includes/gateway-chast.php:253
+#: includes/gateway-chast.php:264
 #, php-format
 msgid "Installments: declined, %s."
 msgstr "Покупка частинами: відмова, %s."
 
-#: includes/gateway-chast.php:263
+#: includes/gateway-chast.php:274
 msgid "waiting for the customer to confirm"
 msgstr "чекаємо підтвердження клієнта"
 
-#: includes/gateway-chast.php:264
+#: includes/gateway-chast.php:275
 msgid "purchase confirmed, installments are active"
 msgstr "покупку підтверджено, розстрочка активна"
 
-#: includes/gateway-chast.php:265
+#: includes/gateway-chast.php:276
 msgid "the customer has paid in full"
 msgstr "клієнт повністю сплатив"
 
-#: includes/gateway-chast.php:266
+#: includes/gateway-chast.php:277
 msgid "goods returned, money sent back to the customer"
 msgstr "товар повернено, кошти повернуто клієнту"
 
 #. translators: %s: status, e.g. "the customer has paid in full"
-#: includes/gateway-chast.php:269
+#: includes/gateway-chast.php:280
 #, php-format
 msgid "Installments: %s."
 msgstr "Покупка частинами: %s."
 
 #. translators: %s: bank application state
-#: includes/gateway-chast.php:293
+#: includes/gateway-chast.php:304
 #, php-format
 msgid "Installments: WARNING, the order is Completed but the application is in state %s, so the bank was not confirmed."
 msgstr "Покупка частинами: УВАГА, замовлення у статусі «Виконано», але заявка в статусі %s, тому банк не підтверджено."
 
 #. translators: %s: bank application state
-#: includes/gateway-chast.php:293
+#: includes/gateway-chast.php:304
 msgid "unknown"
 msgstr "невідомо"
 
 #. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
-#: includes/gateway-chast.php:300
+#: includes/gateway-chast.php:311
 #, php-format
 msgid "Installments: ERROR confirming (%1$d) %2$s [trace %3$s]. Check the application in your monobank account."
 msgstr "Покупка частинами: ПОМИЛКА підтвердження (%1$d) %2$s [trace %3$s]. Перевірте заявку в кабінеті monobank."
 
-#: includes/gateway-chast.php:303
+#: includes/gateway-chast.php:314
 msgid "Installments: shipping confirmed at monobank."
 msgstr "Покупка частинами: відправку товару підтверджено в monobank."
 
-#: includes/gateway-chast.php:322
+#: includes/gateway-chast.php:333
 msgid "Installments: application cancelled at monobank."
 msgstr "Покупка частинами: заявку скасовано в monobank."
 
 #. translators: 1: HTTP code, 2: error from the bank, 3: bank trace id
-#: includes/gateway-chast.php:324
+#: includes/gateway-chast.php:335
 #, php-format
 msgid "Installments: ERROR cancelling (%1$d) %2$s [trace %3$s]."
 msgstr "Покупка частинами: ПОМИЛКА скасування (%1$d) %2$s [trace %3$s]."
 
-#: includes/gateway-chast.php:331
+#: includes/gateway-chast.php:342
 msgid "No installments application or refund amount."
 msgstr "Немає заявки Покупки частинами або суми повернення."
 
-#: includes/gateway-chast.php:337
+#: includes/gateway-chast.php:348
 msgid "A refund is only possible after the order is Completed. If you have not shipped yet, cancel the order instead."
 msgstr "Повернення можливе лише після «Виконано». Якщо товар ще не відправлено, скасуйте замовлення."
 
 #. translators: 1: amount, 2: refund id, 3: refund reason
-#: includes/gateway-chast.php:345
+#: includes/gateway-chast.php:356
 #, php-format
 msgid "Installments: refund of %1$s (%2$s) sent to monobank. %3$s"
 msgstr "Покупка частинами: повернення %1$s (%2$s) відправлено в monobank. %3$s"
 
 #. translators: %s: e.g. "4 payments of ~672 UAH"
-#: includes/gateway-chast.php:358
+#: includes/gateway-chast.php:369
 #, php-format
 msgid "monobank installments: %s"
 msgstr "Покупка частинами monobank: %s"
 
-#: includes/gateway-cod.php:23
+#: includes/gateway-cod.php:22
+msgid "Prepayment through plata by mono"
+msgstr "Передоплата через plata by mono"
+
+#: includes/gateway-cod.php:24
 msgid "Prepayment"
 msgstr "Передоплата"
 
-#: includes/gateway-cod.php:26
+#: includes/gateway-cod.php:27
 msgid "Fixed amount, UAH"
 msgstr "Фіксована сума, грн"
 
-#: includes/gateway-cod.php:26
+#: includes/gateway-cod.php:27
 msgid "Percent of the order, %"
 msgstr "Відсоток від замовлення, %"
 
-#: includes/gateway-cod.php:29
+#: includes/gateway-cod.php:30
 msgid "Prepayment size"
 msgstr "Розмір передоплати"
 
-#: includes/gateway-cod.php:32
+#: includes/gateway-cod.php:33
 msgid "0 means no prepayment (regular cash on delivery)."
 msgstr "0 означає без передоплати (звичайний накладений платіж)."
 
-#: includes/gateway-cod.php:35
+#: includes/gateway-cod.php:36
 msgid "plata by mono token"
 msgstr "Токен plata by mono"
 
-#: includes/gateway-cod.php:37
+#: includes/gateway-cod.php:38
 msgid "Leave empty to use the token from the official \"plata by mono\" plugin."
 msgstr "Порожньо: береться токен з офіційного плагіна «plata by mono»."
 
 #. translators: %s: order number
-#: includes/gateway-cod.php:86
+#: includes/gateway-cod.php:94
 #, php-format
 msgid "Prepayment for order #%s"
 msgstr "Передоплата за замовлення №%s"
 
 #. translators: 1: HTTP code, 2: error from the bank
-#: includes/gateway-cod.php:95
+#: includes/gateway-cod.php:103
 #, php-format
 msgid "Prepayment: could not create the invoice (%1$d) %2$s"
 msgstr "Передоплата: не вдалося створити рахунок (%1$d) %2$s"
 
-#: includes/gateway-cod.php:96
+#: includes/gateway-cod.php:104
 msgid "Could not create the prepayment invoice. Please try again or choose another payment method."
 msgstr "Не вдалося створити рахунок на передоплату. Спробуйте ще раз або оберіть інший спосіб оплати."
 
 #. translators: 1: invoice id, 2: amount
-#: includes/gateway-cod.php:105
+#: includes/gateway-cod.php:113
 #, php-format
 msgid "Prepayment: invoice %1$s for %2$s created, waiting for payment."
 msgstr "Передоплата: рахунок %1$s на %2$s створено, чекаємо оплату."
 
 #. translators: 1: prepayment amount, 2: amount to pay on delivery
-#: includes/gateway-cod.php:129
+#: includes/gateway-cod.php:137
 #, php-format
 msgid "Prepayment of %1$s received. To pay on delivery: %2$s."
 msgstr "Передоплату %1$s отримано. При отриманні (накладений платіж): %2$s."
 
 #. translators: 1: invoice status, 2: reason from the bank (may be empty)
-#: includes/gateway-cod.php:134
+#: includes/gateway-cod.php:142
 #, php-format
 msgid "Prepayment: invoice status is %1$s. %2$s"
 msgstr "Передоплата: рахунок у статусі %1$s. %2$s"
 
 #. translators: 1: prepayment amount, 2: amount to pay on delivery
-#: includes/gateway-cod.php:154
+#: includes/gateway-cod.php:162
 #, php-format
 msgid "<strong>Prepayment of %1$s received.</strong> You will pay %2$s on delivery."
 msgstr "<strong>Передоплату %1$s отримано.</strong> При отриманні сплатите %2$s."
 
 #. translators: %s: prepayment amount
-#: includes/gateway-cod.php:157
+#: includes/gateway-cod.php:165
 #, php-format
 msgid "<strong>The prepayment has not arrived yet.</strong> We will start on your order once %s is paid."
 msgstr "<strong>Передоплату ще не отримано.</strong> Замовлення буде прийнято в роботу після оплати %s."
 
-#: includes/gateway-cod.php:158
+#: includes/gateway-cod.php:166
 msgid "Pay the prepayment"
 msgstr "Сплатити передоплату"
 
-#: includes/gateway-cod.php:213
-#: includes/gateway-cod.php:229
+#: includes/gateway-cod.php:221 includes/gateway-cod.php:237
 msgid "Online prepayment:"
 msgstr "Передоплата онлайн:"
 
-#: includes/gateway-cod.php:213
+#: includes/gateway-cod.php:221
 msgid "(paid)"
 msgstr "(сплачено)"
 
-#: includes/gateway-cod.php:213
+#: includes/gateway-cod.php:221
 msgid "(not paid)"
 msgstr "(не сплачено)"
 
-#: includes/gateway-cod.php:214
+#: includes/gateway-cod.php:222
 msgid "To pay on delivery:"
 msgstr "При отриманні:"
 
-#: includes/gateway-cod.php:229
+#: includes/gateway-cod.php:237
 msgid "not paid"
 msgstr "не сплачено"
 
-#: includes/gateway-cod.php:231
+#: includes/gateway-cod.php:239
 msgid "Cash on delivery (waybill):"
 msgstr "Накладений платіж (ТТН):"
 
-#: toloka-monobank.php:85
-msgid "Installments"
-msgstr "Покупка частинами"
+#: toloka-monobank.php:55
+msgid "Free and open source"
+msgstr "Безкоштовно і з відкритим кодом"
 
-#: toloka-monobank.php:86
+#: toloka-monobank.php:56
+msgid "Docs"
+msgstr "Документація"
+
+#: toloka-monobank.php:57
+msgid "Report a bug"
+msgstr "Повідомити про помилку"
+
+#: toloka-monobank.php:107
 msgid "Cash on delivery"
 msgstr "Накладений платіж"

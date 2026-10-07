@@ -35,9 +35,11 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
 
     public function init_form_fields() {
         $this->form_fields = [
+            'general'         => ['title' => __('General', 'toloka-monobank'), 'type' => 'title'],
             'enabled'         => ['title' => __('Enable', 'toloka-monobank'), 'type' => 'checkbox', 'label' => __('Enable monobank installments', 'toloka-monobank'), 'default' => 'no'],
             'title'           => ['title' => __('Title', 'toloka-monobank'), 'type' => 'text', 'default' => __('monobank installments', 'toloka-monobank')],
             'description'     => ['title' => __('Description', 'toloka-monobank'), 'type' => 'textarea', 'default' => __('No overpayment. After placing the order, confirm the purchase in the monobank app.', 'toloka-monobank')],
+            'connection'      => ['title' => __('Connection to monobank', 'toloka-monobank'), 'type' => 'title'],
             'environment'     => [
                 'title'       => __('Environment', 'toloka-monobank'),
                 'type'        => 'select',
@@ -47,15 +49,23 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
                     'stage'      => __('Stage (test with the real app)', 'toloka-monobank'),
                     'production' => __('Production', 'toloka-monobank'),
                 ],
-                'description' => __('Sandbox: Store ID <code>test_store_with_confirm</code>, secret <code>secret_98765432--123-123</code>. A phone number ending in 4 is approved.', 'toloka-monobank'),
+                'description' => __('Sandbox and Stage are for testing. Use Production for real orders.', 'toloka-monobank'),
             ],
             'store_id'        => ['title' => __('Store ID', 'toloka-monobank'), 'type' => 'text'],
             'store_secret'    => ['title' => __('Secret key', 'toloka-monobank'), 'type' => 'password'],
+            'checkout'        => ['title' => __('Installments', 'toloka-monobank'), 'type' => 'title'],
             'parts'           => ['title' => __('Number of payments', 'toloka-monobank'), 'type' => 'text', 'default' => '3,4,6', 'description' => __('Comma separated, from 3 to 25. Must match your contract with the bank.', 'toloka-monobank')],
             'min_total'       => ['title' => __('Minimum amount, UAH', 'toloka-monobank'), 'type' => 'number', 'default' => '500'],
             'max_total'       => ['title' => __('Maximum amount, UAH', 'toloka-monobank'), 'type' => 'number', 'default' => '', 'description' => __('Leave empty for no limit.', 'toloka-monobank')],
             'show_on_product' => ['title' => __('Product page', 'toloka-monobank'), 'type' => 'checkbox', 'label' => __('Show "N payments of X" under the price', 'toloka-monobank'), 'default' => 'yes'],
         ];
+    }
+
+    public function admin_options() {
+        toloka_monobank_header();
+        echo '<div class="toloka-ui">';
+        parent::admin_options();
+        echo '</div>';
     }
 
     public function api() {
@@ -127,7 +137,8 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
             wc_add_notice(__('Choose the number of payments.', 'toloka-monobank'), 'error');
             return false;
         }
-        if (!self::normalize_phone(wc_clean(wp_unslash($_POST['billing_phone'] ?? '')))) {
+        $phone = isset($_POST['billing_phone']) ? wc_clean(wp_unslash($_POST['billing_phone'])) : (WC()->customer ? WC()->customer->get_billing_phone() : '');
+        if (!self::normalize_phone($phone)) {
             wc_add_notice(__('For monobank installments, enter a Ukrainian phone number linked to monobank.', 'toloka-monobank'), 'error');
             return false;
         }

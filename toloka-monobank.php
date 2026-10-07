@@ -16,11 +16,15 @@
 defined('ABSPATH') || exit;
 
 const TOLOKA_CHAST_CRON = 'toloka_chast_poll';
+const TOLOKA_MONOBANK_FILE = __FILE__;
+const TOLOKA_MONOBANK_VERSION = '0.1.0';
+
+require_once __DIR__ . '/toloka-ui/toloka-ui.php';
 
 add_action('before_woocommerce_init', function () {
     if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, false);
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
     }
 });
 
@@ -35,6 +39,9 @@ add_action('plugins_loaded', function () {
     require_once __DIR__ . '/includes/chast-api.php';
     require_once __DIR__ . '/includes/gateway-chast.php';
     require_once __DIR__ . '/includes/gateway-cod.php';
+    if (class_exists(\Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType::class)) {
+        require_once __DIR__ . '/includes/blocks.php';
+    }
 
     add_filter('woocommerce_payment_gateways', function ($gateways) {
         $gateways[] = 'Toloka_Gateway_Chast';
@@ -43,6 +50,20 @@ add_action('plugins_loaded', function () {
         }, $gateways);
     }, 20);
 }, 11);
+
+function toloka_monobank_header() {
+    toloka_ui_header('Toloka for monobank', TOLOKA_MONOBANK_VERSION, __('Free and open source', 'toloka-monobank'), [
+        __('Docs', 'toloka-monobank')        => 'https://github.com/tolokacode/toloka-monobank#readme',
+        __('Report a bug', 'toloka-monobank') => 'https://github.com/tolokacode/toloka-monobank/issues',
+        'GitHub'                             => 'https://github.com/tolokacode/toloka-monobank',
+    ]);
+}
+
+add_action('admin_enqueue_scripts', function () {
+    if (($_GET['page'] ?? '') === 'wc-settings' && in_array($_GET['section'] ?? '', ['toloka_chast', 'cod'], true)) {
+        toloka_ui_enqueue();
+    }
+});
 
 function toloka_gateway($id) {
     $gateways = WC()->payment_gateways()->payment_gateways();
