@@ -159,10 +159,10 @@ class Toloka_Gateway_COD extends WC_Gateway_COD {
             $amount = wc_price((float) $order->get_meta(self::META_AMOUNT));
             if ($order->get_meta(self::META_PAID) === 'yes') {
                 /* translators: 1: prepayment amount, 2: amount to pay on delivery */
-                printf('<p>' . wp_kses_post(__('<strong>Prepayment of %1$s received.</strong> You will pay %2$s on delivery.', 'toloka-monobank')) . '</p>', $amount, wc_price(self::rest_for($order)));
+                echo '<p>' . wp_kses_post(sprintf(__('<strong>Prepayment of %1$s received.</strong> You will pay %2$s on delivery.', 'toloka-monobank'), $amount, wc_price(self::rest_for($order)))) . '</p>';
             } else {
                 /* translators: %s: prepayment amount */
-                printf('<p>' . wp_kses_post(__('<strong>The prepayment has not arrived yet.</strong> We will start on your order once %s is paid.', 'toloka-monobank')) . '</p>', $amount);
+                echo '<p>' . wp_kses_post(sprintf(__('<strong>The prepayment has not arrived yet.</strong> We will start on your order once %s is paid.', 'toloka-monobank'), $amount)) . '</p>';
                 printf('<p><a class="button" href="%s">%s</a></p>', esc_url($order->get_checkout_payment_url()), esc_html__('Pay the prepayment', 'toloka-monobank'));
             }
         }
@@ -233,8 +233,8 @@ add_action('woocommerce_admin_order_totals_after_total', function ($order_id) {
         return;
     }
     $paid = $order->get_meta(Toloka_Gateway_COD::META_PAID) === 'yes';
-    printf('<tr><td class="label">%s</td><td width="1%%"></td><td class="total">%s %s</td></tr>',
-        esc_html__('Online prepayment:', 'toloka-monobank'), wc_price($amount), $paid ? '✅' : '❌ ' . esc_html__('not paid', 'toloka-monobank'));
-    printf('<tr><td class="label"><strong>%s</strong></td><td width="1%%"></td><td class="total"><strong>%s</strong></td></tr>',
-        esc_html__('Cash on delivery (waybill):', 'toloka-monobank'), wc_price(Toloka_Gateway_COD::rest_for($order)));
+    echo wp_kses_post(sprintf('<tr><td class="label">%s</td><td width="1%%"></td><td class="total">%s %s</td></tr>',
+        esc_html__('Online prepayment:', 'toloka-monobank'), wc_price($amount), $paid ? '✅' : '❌ ' . esc_html__('not paid', 'toloka-monobank')));
+    echo wp_kses_post(sprintf('<tr><td class="label"><strong>%s</strong></td><td width="1%%"></td><td class="total"><strong>%s</strong></td></tr>',
+        esc_html__('Cash on delivery (waybill):', 'toloka-monobank'), wc_price(Toloka_Gateway_COD::rest_for($order))));
 });
