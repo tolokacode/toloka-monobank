@@ -355,10 +355,13 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
             return new WP_Error('toloka_chast', __('A refund is only possible after the order is Completed. If you have not shipped yet, cancel the order instead.', 'toloka-monobank'));
         }
         $return_id = $order->get_id() . '-R' . time();
-        $result    = $this->api()->return_order($id, $return_id, $amount);
+        $paid      = $this->api()->paid($id);
+        $to_card   = !$paid['ok'] || !empty($paid['data']['bank_can_return_money_to_card']);
+        $result    = $this->api()->return_order($id, $return_id, $amount, $to_card);
         if (!$result['ok']) {
             return new WP_Error('toloka_chast', sprintf('monobank: %s [trace %s]', $result['error'] ?: $result['code'], $result['trace']));
         }
+        delete_transient('toloka_chast_info_' . $order->get_id());
         /* translators: 1: amount, 2: refund id, 3: refund reason */
         $order->add_order_note(sprintf(__('Installments: refund of %1$s (%2$s) sent to monobank. %3$s', 'toloka-monobank'), wc_price($amount), $return_id, $reason));
         return true;
@@ -439,15 +442,70 @@ add_action('woocommerce_single_product_summary', function () {
     }
 }, 11);
 
-add_action('woocommerce_admin_order_data_after_order_details', function ($order) {
-    if ($order->get_payment_method() !== 'toloka_chast' || !$order->get_meta(Toloka_Gateway_Chast::META_ID)) {
+add_action('add_meta_boxes', function ($screen, $object) {
+    $order = $object instanceof WC_Order ? $object : wc_get_order($object);
+    if (!$order || $order->get_payment_method() !== 'toloka_chast' || !$order->get_meta(Toloka_Gateway_Chast::META_ID)) {
         return;
     }
+    add_meta_box('toloka-chast', __('monobank installments', 'toloka-monobank'), 'toloka_chast_order_box', $screen, 'side', 'high');
+}, 10, 2);
+
+function toloka_chast_state_label($state) {
+    [$main, $sub] = array_pad(explode('/', $state, 2), 2, '');
+    $labels = [
+        'WAITING_FOR_CLIENT'        => __('Waiting for the customer', 'toloka-monobank'),
+        'WAITING_FOR_STORE_CONFIRM' => __('Approved, waiting for shipping', 'toloka-monobank'),
+        'ACTIVE'                    => __('Active, the bank paid the shop', 'toloka-monobank'),
+        'DONE'                      => __('Fully paid by the customer', 'toloka-monobank'),
+        'RETURNED'                  => __('Returned', 'toloka-monobank'),
+    ];
+    if ($main === 'FAIL') {
+        /* translators: %s: reason */
+        return sprintf(__('Failed: %s', 'toloka-monobank'), Toloka_Gateway_Chast::fail_reason($sub));
+    }
+    return $labels[$sub] ?? ($state ?: '—');
+}
+
+function toloka_chast_order_box($object) {
+    $order   = $object instanceof WC_Order ? $object : wc_get_order($object);
+    $id      = $order->get_meta(Toloka_Gateway_Chast::META_ID);
+    $state   = (string) $order->get_meta(Toloka_Gateway_Chast::META_STATE);
+    $gateway = toloka_gateway('toloka_chast');
+    $rows    = [
+        __('Status at the bank', 'toloka-monobank') => esc_html(toloka_chast_state_label($state)),
+        __('Payments', 'toloka-monobank')           => esc_html($order->get_meta(Toloka_Gateway_Chast::META_PARTS) ?: '—'),
+    ];
+
+    if ($gateway && strpos($state, 'SUCCESS/') === 0) {
+        $info = get_transient('toloka_chast_info_' . $order->get_id());
+        if ($info === false) {
+            $info = ['data' => $gateway->api()->data($id)['data'], 'paid' => $gateway->api()->paid($id)['data']];
+            set_transient('toloka_chast_info_' . $order->get_id(), $info, 10 * MINUTE_IN_SECONDS);
+        }
+        if (!empty($info['data']['maskedCard'])) {
+            $rows[__('Card', 'toloka-monobank')] = esc_html($info['data']['maskedCard']);
+        }
+        if (isset($info['paid']['fully_paid'])) {
+            $rows[__('Fully paid', 'toloka-monobank')] = $info['paid']['fully_paid'] ? esc_html__('Yes', 'toloka-monobank') : esc_html__('No', 'toloka-monobank');
+            $rows[__('Refund goes to', 'toloka-monobank')] = $info['paid']['bank_can_return_money_to_card'] ? esc_html__('Card', 'toloka-monobank') : esc_html__('Cash in the shop', 'toloka-monobank');
+        }
+        foreach ($info['data']['reverse_list'] ?? [] as $refund) {
+            /* translators: %s: refund date */
+            $rows[sprintf(__('Refund %s', 'toloka-monobank'), wp_date('d.m.Y', strtotime($refund['timestamp'])))] = wc_price($refund['sum']);
+        }
+    }
+
+    echo '<table class="widefat striped" style="border:0">';
+    foreach ($rows as $label => $value) {
+        printf('<tr><td>%s</td><td><strong>%s</strong></td></tr>', esc_html($label), wp_kses_post($value));
+    }
+    echo '</table>';
+
     $url = wp_nonce_url(admin_url('admin-post.php?action=toloka_chast_letter&order_id=' . $order->get_id()), 'toloka_chast_letter_' . $order->get_id());
-    printf('<p class="form-field form-field-wide"><a class="button" href="%s" target="_blank">%s</a> <a href="%s">%s</a></p>',
+    printf('<p><a class="button" href="%s" target="_blank">%s</a> <a href="%s">%s</a></p>',
         esc_url($url), esc_html__('Guarantee letter (PDF)', 'toloka-monobank'),
         esc_url(add_query_arg('signed', 1, $url)), esc_html__('Signed file (.p7s)', 'toloka-monobank'));
-});
+}
 
 add_action('admin_post_toloka_chast_letter', function () {
     $order_id = absint(wp_unslash($_GET['order_id'] ?? 0));

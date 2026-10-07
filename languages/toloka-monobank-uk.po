@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Toloka for monobank 0.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/tolokacode/toloka-monobank/issues\n"
-"POT-Creation-Date: 2026-10-07T09:19:50+00:00\n"
+"POT-Creation-Date: 2026-10-07T09:37:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid "tolokacode"
 msgstr "tolokacode"
 
 #: includes/gateway-chast.php:22 includes/gateway-chast.php:40
-#: assets/js/chast-block.js:9
+#: includes/gateway-chast.php:450 assets/js/chast-block.js:9
 msgid "monobank installments"
 msgstr "Покупка частинами monobank"
 
@@ -101,7 +101,7 @@ msgstr "Store ID"
 msgid "Secret key"
 msgstr "Секретний ключ"
 
-#: includes/gateway-chast.php:56 toloka-monobank.php:109
+#: includes/gateway-chast.php:56 toloka-monobank.php:110
 msgid "Installments"
 msgstr "Покупка частинами"
 
@@ -318,31 +318,95 @@ msgid "A refund is only possible after the order is Completed. If you have not s
 msgstr "Повернення можливе лише після «Виконано». Якщо товар ще не відправлено, скасуйте замовлення."
 
 #. translators: 1: amount, 2: refund id, 3: refund reason
-#: includes/gateway-chast.php:363
+#: includes/gateway-chast.php:366
 #, php-format
 msgid "Installments: refund of %1$s (%2$s) sent to monobank. %3$s"
 msgstr "Покупка частинами: повернення %1$s (%2$s) відправлено в monobank. %3$s"
 
 #. translators: %s: e.g. "4 payments of ~672 UAH"
-#: includes/gateway-chast.php:376
+#: includes/gateway-chast.php:379
 #, php-format
 msgid "monobank installments: %s"
 msgstr "Покупка частинами monobank: %s"
 
-#: includes/gateway-chast.php:448
+#: includes/gateway-chast.php:456
+msgid "Waiting for the customer"
+msgstr "Чекає на клієнта"
+
+#: includes/gateway-chast.php:457
+msgid "Approved, waiting for shipping"
+msgstr "Схвалено, чекає на відправку"
+
+#: includes/gateway-chast.php:458
+msgid "Active, the bank paid the shop"
+msgstr "Активна, банк перерахував кошти магазину"
+
+#: includes/gateway-chast.php:459
+msgid "Fully paid by the customer"
+msgstr "Клієнт повністю сплатив"
+
+#: includes/gateway-chast.php:460
+msgid "Returned"
+msgstr "Повернено"
+
+#. translators: %s: reason
+#: includes/gateway-chast.php:464
+#, php-format
+msgid "Failed: %s"
+msgstr "Не вдалося: %s"
+
+#: includes/gateway-chast.php:475
+msgid "Status at the bank"
+msgstr "Статус у банку"
+
+#: includes/gateway-chast.php:476 includes/report.php:77
+msgid "Payments"
+msgstr "Платежів"
+
+#: includes/gateway-chast.php:486 includes/gateway-chast.php:490
+msgid "Card"
+msgstr "Картка"
+
+#: includes/gateway-chast.php:489
+msgid "Fully paid"
+msgstr "Повністю сплачено"
+
+#: includes/gateway-chast.php:489
+msgid "Yes"
+msgstr "Так"
+
+#: includes/gateway-chast.php:489
+msgid "No"
+msgstr "Ні"
+
+#: includes/gateway-chast.php:490
+msgid "Refund goes to"
+msgstr "Повернення коштів"
+
+#: includes/gateway-chast.php:490
+msgid "Cash in the shop"
+msgstr "Готівкою в магазині"
+
+#. translators: %s: refund date
+#: includes/gateway-chast.php:494
+#, php-format
+msgid "Refund %s"
+msgstr "Повернення %s"
+
+#: includes/gateway-chast.php:506
 msgid "Guarantee letter (PDF)"
 msgstr "Гарантійний лист (PDF)"
 
-#: includes/gateway-chast.php:449
+#: includes/gateway-chast.php:507
 msgid "Signed file (.p7s)"
 msgstr "Підписаний файл (.p7s)"
 
-#: includes/gateway-chast.php:458
+#: includes/gateway-chast.php:516 includes/report.php:88
 msgid "Not allowed."
 msgstr "Недостатньо прав."
 
 #. translators: %s: error from the bank
-#: includes/gateway-chast.php:463
+#: includes/gateway-chast.php:521
 #, php-format
 msgid "monobank did not return the guarantee letter: %s"
 msgstr "monobank не повернув гарантійний лист: %s"
@@ -453,18 +517,74 @@ msgstr "не сплачено"
 msgid "Cash on delivery (waybill):"
 msgstr "Накладений платіж (ТТН):"
 
-#: toloka-monobank.php:58
+#: includes/report.php:6 includes/report.php:33
+msgid "monobank installments report"
+msgstr "Звіт Покупки частинами monobank"
+
+#: includes/report.php:6
+msgid "monobank report"
+msgstr "Звіт monobank"
+
+#: includes/report.php:17
+msgid "Set up monobank installments first."
+msgstr "Спочатку налаштуйте Покупку частинами monobank."
+
+#: includes/report.php:36
+msgid "Show"
+msgstr "Показати"
+
+#: includes/report.php:36
+msgid "Download CSV"
+msgstr "Завантажити CSV"
+
+#: includes/report.php:43
+msgid "No operations on this day."
+msgstr "За цей день операцій немає."
+
+#: includes/report.php:68
+msgid "Total"
+msgstr "Разом"
+
+#: includes/report.php:74
+msgid "Date"
+msgstr "Дата"
+
+#: includes/report.php:75
+msgid "Order"
+msgstr "Замовлення"
+
+#: includes/report.php:76
+msgid "Contract"
+msgstr "Договір"
+
+#: includes/report.php:78
+msgid "Amount"
+msgstr "Сума"
+
+#: includes/report.php:79
+msgid "Commission, %"
+msgstr "Комісія, %"
+
+#: includes/report.php:80
+msgid "Commission"
+msgstr "Комісія"
+
+#: includes/report.php:81
+msgid "Paid to the shop"
+msgstr "Перераховано магазину"
+
+#: toloka-monobank.php:59
 msgid "Free and open source"
 msgstr "Безкоштовно і з відкритим кодом"
 
-#: toloka-monobank.php:59
+#: toloka-monobank.php:60
 msgid "Docs"
 msgstr "Документація"
 
-#: toloka-monobank.php:60
+#: toloka-monobank.php:61
 msgid "Report a bug"
 msgstr "Повідомити про помилку"
 
-#: toloka-monobank.php:110
+#: toloka-monobank.php:111
 msgid "Cash on delivery"
 msgstr "Накладений платіж"
