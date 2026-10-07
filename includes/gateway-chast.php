@@ -144,6 +144,10 @@ class Toloka_Gateway_Chast extends WC_Payment_Gateway {
             wc_add_notice(__('For monobank installments, enter a Ukrainian phone number linked to monobank.', 'toloka-monobank'), 'error');
             return false;
         }
+        if (!$this->api()->client_found(self::normalize_phone($phone))) {
+            wc_add_notice(__('This phone number is not a monobank client. Enter the number linked to monobank or choose another payment method.', 'toloka-monobank'), 'error');
+            return false;
+        }
         return true;
     }
 
@@ -434,3 +438,44 @@ add_action('woocommerce_single_product_summary', function () {
         $gateway->product_line();
     }
 }, 11);
+
+add_action('woocommerce_admin_order_data_after_order_details', function ($order) {
+    if ($order->get_payment_method() !== 'toloka_chast' || !$order->get_meta(Toloka_Gateway_Chast::META_ID)) {
+        return;
+    }
+    $url = wp_nonce_url(admin_url('admin-post.php?action=toloka_chast_letter&order_id=' . $order->get_id()), 'toloka_chast_letter_' . $order->get_id());
+    printf('<p class="form-field form-field-wide"><a class="button" href="%s" target="_blank">%s</a> <a href="%s">%s</a></p>',
+        esc_url($url), esc_html__('Guarantee letter (PDF)', 'toloka-monobank'),
+        esc_url(add_query_arg('signed', 1, $url)), esc_html__('Signed file (.p7s)', 'toloka-monobank'));
+});
+
+add_action('admin_post_toloka_chast_letter', function () {
+    $order_id = absint(wp_unslash($_GET['order_id'] ?? 0));
+    check_admin_referer('toloka_chast_letter_' . $order_id);
+    $order   = wc_get_order($order_id);
+    $gateway = toloka_gateway('toloka_chast');
+    if (!current_user_can('edit_shop_orders') || !$order || !$gateway) {
+        wp_die(esc_html__('Not allowed.', 'toloka-monobank'));
+    }
+    $result = $gateway->api()->letter($order->get_meta(Toloka_Gateway_Chast::META_ID));
+    if (!$result['ok']) {
+        /* translators: %s: error from the bank */
+        wp_die(esc_html(sprintf(__('monobank did not return the guarantee letter: %s', 'toloka-monobank'), $result['error'] ?: $result['code'])));
+    }
+    $file  = $result['body'];
+    $name  = 'guarantee-letter-' . $order->get_order_number();
+    $start = strpos($file, '%PDF');
+    $end   = strrpos($file, '%%EOF');
+    if (!empty($_GET['signed']) && $start !== 0) {
+        header('Content-Type: application/pkcs7-mime');
+        header('Content-Disposition: attachment; filename="' . $name . '.pdf.p7s"');
+    } else {
+        if ($start !== false && $end !== false) {
+            $file = substr($file, $start, $end + 5 - $start);
+        }
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="' . $name . '.pdf"');
+    }
+    echo $file; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- File from the bank.
+    exit;
+});
