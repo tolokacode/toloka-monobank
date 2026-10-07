@@ -42,6 +42,7 @@ add_action('plugins_loaded', function () {
     require_once __DIR__ . '/includes/chast-api.php';
     require_once __DIR__ . '/includes/gateway-chast.php';
     require_once __DIR__ . '/includes/gateway-cod.php';
+    require_once __DIR__ . '/includes/report.php';
     if (class_exists(\Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType::class)) {
         require_once __DIR__ . '/includes/blocks.php';
     }
@@ -63,7 +64,7 @@ function toloka_monobank_header() {
 }
 
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook === 'woocommerce_page_wc-settings') {
+    if (in_array($hook, ['woocommerce_page_wc-settings', 'woocommerce_page_toloka-chast-report'], true)) {
         toloka_ui_enqueue();
     }
 });

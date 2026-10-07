@@ -45,13 +45,25 @@ class Toloka_Chast_Api {
         return $this->request('/api/order/reject', ['order_id' => $id]);
     }
 
-    public function return_order($id, $return_id, $sum) {
+    public function return_order($id, $return_id, $sum, $to_card = true) {
         return $this->request('/api/order/return', [
             'order_id'             => $id,
             'store_return_id'      => $return_id,
             'sum'                  => round((float) $sum, 2),
-            'return_money_to_card' => true,
+            'return_money_to_card' => $to_card,
         ]);
+    }
+
+    public function data($id) {
+        return $this->request('/api/order/data', ['order_id' => $id]);
+    }
+
+    public function paid($id) {
+        return $this->request('/api/order/check/paid', ['order_id' => $id]);
+    }
+
+    public function report($date) {
+        return $this->request('/api/store/report', ['date' => $date]);
     }
 
     public function client_found($phone) {
