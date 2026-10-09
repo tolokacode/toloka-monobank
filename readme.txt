@@ -8,7 +8,7 @@ Stable tag: 0.1.0
 License: EUPL-1.2
 License URI: https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
 
-monobank installments and cash on delivery with online prepayment for WooCommerce. Free, no paid version.
+monobank installments and cash on delivery with online prepayment for WooCommerce.
 
 == Description ==
 
@@ -21,8 +21,6 @@ Adds what the official "plata by mono" plugin is missing:
 Card payments stay with the official plugin. Toloka works next to it.
 
 Works with the classic checkout and the checkout block. English and Ukrainian.
-
-Free and open source. There is no paid version.
 
 = External services =
 
@@ -51,10 +49,6 @@ Only for card payments and for the prepayment token. Installments work without i
 = How do I test it? =
 
 Choose the Sandbox environment. Store ID `test_store_with_confirm`, secret `secret_98765432--123-123`. A phone number ending in 4 is approved.
-
-= Is there a paid version? =
-
-No.
 
 == Changelog ==
 
