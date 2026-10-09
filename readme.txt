@@ -1,5 +1,5 @@
 === Toloka for monobank ===
-Contributors: tolokacode
+Contributors: bulhakov
 Tags: monobank, installments, woocommerce, cash on delivery, prepayment
 Requires at least: 6.5
 Tested up to: 7.1

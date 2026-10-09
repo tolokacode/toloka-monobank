@@ -13,7 +13,6 @@
  * WC requires at least: 8.0
  * WC tested up to: 11.1
  * Text Domain: toloka-monobank
- * Domain Path: /languages
  */
 
 defined('ABSPATH') || exit;
@@ -29,10 +28,6 @@ add_action('before_woocommerce_init', function () {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
     }
-});
-
-add_action('init', function () {
-    load_plugin_textdomain('toloka-monobank', false, dirname(plugin_basename(__FILE__)) . '/languages');
 });
 
 add_action('plugins_loaded', function () {

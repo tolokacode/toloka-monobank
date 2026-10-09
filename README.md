@@ -43,15 +43,16 @@ Logs are in WooCommerce > Status > Logs, under `toloka-chast` and `toloka-prepay
 
 ## Translations
 
-Texts in the code are in English. The Ukrainian translation is in `languages/`, and WordPress
-picks it automatically when the site language is Ukrainian.
+Texts in the code are in English. Translations come from
+[translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/toloka-monobank/),
+and WordPress installs them by itself. They are not in the plugin zip.
 
-After you add or change a text, update the files with [WP-CLI](https://wp-cli.org/):
+`languages/toloka-monobank-uk.po` is our Ukrainian translation. Import it on translate.wordpress.org
+after a release with new texts. To update it with [WP-CLI](https://wp-cli.org/):
 
 ```bash
 wp i18n make-pot . languages/toloka-monobank.pot
 # add the new texts to languages/toloka-monobank-uk.po (Poedit or any text editor)
-wp i18n make-mo languages
 ```
 
 ## Contributing
