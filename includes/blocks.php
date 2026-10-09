@@ -26,7 +26,7 @@ class Toloka_Chast_Block extends AbstractPaymentMethodType {
             filemtime(plugin_dir_path(TOLOKA_MONOBANK_FILE) . $file),
             true
         );
-        wp_set_script_translations('toloka-chast-block', 'toloka-monobank', plugin_dir_path(TOLOKA_MONOBANK_FILE) . 'languages');
+        wp_set_script_translations('toloka-chast-block', 'toloka-monobank');
         return ['toloka-chast-block'];
     }
 
