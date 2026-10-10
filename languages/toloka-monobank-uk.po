@@ -1,5 +1,5 @@
 # Copyright (C) 2026 tolokacode
-# This file is distributed under the EUPL-1.2.
+# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Toloka for monobank 0.1.0\n"

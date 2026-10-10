@@ -61,4 +61,4 @@ See the [contributing guide](https://github.com/tolokacode/.github/blob/main/CON
 
 ## License
 
-[EUPL-1.2](LICENSE)
+[GPL-2.0-or-later](LICENSE)

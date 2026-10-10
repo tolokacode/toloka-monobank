@@ -5,8 +5,8 @@
  * Description: monobank installments (Покупка частинами) and cash on delivery with online prepayment. Works alongside the official "plata by mono" plugin.
  * Version: 0.1.0
  * Author: tolokacode
- * License: EUPL-1.2
- * License URI: https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires PHP: 7.4
  * Requires at least: 6.5
  * Requires Plugins: woocommerce
