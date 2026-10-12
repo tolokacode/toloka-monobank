@@ -4,7 +4,7 @@ Tags: monobank, installments, woocommerce, cash on delivery, prepayment
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,6 +17,8 @@ Adds what the official "plata by mono" plugin is missing:
 * **monobank installments** (Покупка частинами). The customer picks the number of payments at checkout and confirms in the monobank app.
 * **Cash on delivery with online prepayment.** The customer pays a fixed amount or a percentage online and the rest on delivery.
 * **"4 payments of ~672 ₴"** under the price on product pages.
+* **Daily installments report** under WooCommerce > monobank report: amounts, commission and payouts, with CSV download.
+* **Order details from the bank** and the **guarantee letter** (PDF) on the order page.
 
 Card payments stay with the official plugin. Toloka works next to it.
 
@@ -28,7 +30,7 @@ Free and open source. There is no paid version.
 
 This plugin connects to monobank:
 
-* **Installments API** (u2.monobank.com.ua) to create, check, confirm, cancel and refund installment applications. It sends the order number, total, products and the customer's phone number when the customer chooses installments.
+* **Installments API** (u2.monobank.com.ua) to create, check, confirm, cancel and refund installment applications. It sends the order number, total, products and the customer's phone number when the customer chooses installments. At checkout it also sends the phone number to check that the customer has monobank. In the admin it gets the order details, the guarantee letter and the daily report for the shop.
 * **plata by mono API** (api.monobank.ua) to create the prepayment invoice. It sends the order number and prepayment amount when the customer chooses cash on delivery with prepayment.
 
 monobank [terms](https://www.monobank.ua/terms) and [privacy policy](https://www.monobank.ua/privacy).
@@ -57,6 +59,12 @@ Choose the Sandbox environment. Store ID `test_store_with_confirm`, secret `secr
 No.
 
 == Changelog ==
+
+= 0.2.0 =
+* Daily installments report with CSV download.
+* Order details from the bank and the guarantee letter on the order page.
+* Checks at checkout that the phone number belongs to a monobank client.
+* Refunds go back to the card, or are paid in cash in the shop when the bank cannot return them to the card.
 
 = 0.1.0 =
 * First release.

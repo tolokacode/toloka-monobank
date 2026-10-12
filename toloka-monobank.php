@@ -3,7 +3,7 @@
  * Plugin Name: Toloka for monobank
  * Plugin URI: https://github.com/tolokacode/toloka-monobank
  * Description: monobank installments (Покупка частинами) and cash on delivery with online prepayment. Works alongside the official "plata by mono" plugin.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: tolokacode
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ defined('ABSPATH') || exit;
 
 const TOLOKA_CHAST_CRON = 'toloka_chast_poll';
 const TOLOKA_MONOBANK_FILE = __FILE__;
-const TOLOKA_MONOBANK_VERSION = '0.1.0';
+const TOLOKA_MONOBANK_VERSION = '0.2.0';
 
 require_once __DIR__ . '/toloka-ui/toloka-ui.php';
 
