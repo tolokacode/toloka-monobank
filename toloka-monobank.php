@@ -3,7 +3,7 @@
  * Plugin Name: Toloka for monobank
  * Plugin URI: https://github.com/tolokacode/toloka-monobank
  * Description: monobank installments (Покупка частинами) and cash on delivery with online prepayment. Works alongside the official "plata by mono" plugin.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: tolokacode
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ defined('ABSPATH') || exit;
 
 const TOLOKA_CHAST_CRON = 'toloka_chast_poll';
 const TOLOKA_MONOBANK_FILE = __FILE__;
-const TOLOKA_MONOBANK_VERSION = '0.1.0';
+const TOLOKA_MONOBANK_VERSION = '0.2.0';
 
 require_once __DIR__ . '/toloka-ui/toloka-ui.php';
 
@@ -37,6 +37,7 @@ add_action('plugins_loaded', function () {
     require_once __DIR__ . '/includes/chast-api.php';
     require_once __DIR__ . '/includes/gateway-chast.php';
     require_once __DIR__ . '/includes/gateway-cod.php';
+    require_once __DIR__ . '/includes/report.php';
     if (class_exists(\Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType::class)) {
         require_once __DIR__ . '/includes/blocks.php';
     }
@@ -58,7 +59,7 @@ function toloka_monobank_header() {
 }
 
 add_action('admin_enqueue_scripts', function ($hook) {
-    if ($hook === 'woocommerce_page_wc-settings') {
+    if (in_array($hook, ['woocommerce_page_wc-settings', 'woocommerce_page_toloka-chast-report'], true)) {
         toloka_ui_enqueue();
     }
 });

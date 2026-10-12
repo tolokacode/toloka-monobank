@@ -45,16 +45,37 @@ class Toloka_Chast_Api {
         return $this->request('/api/order/reject', ['order_id' => $id]);
     }
 
-    public function return_order($id, $return_id, $sum) {
+    public function return_order($id, $return_id, $sum, $to_card = true) {
         return $this->request('/api/order/return', [
             'order_id'             => $id,
             'store_return_id'      => $return_id,
             'sum'                  => round((float) $sum, 2),
-            'return_money_to_card' => true,
+            'return_money_to_card' => $to_card,
         ]);
     }
 
-    // Returns ['ok' => bool, 'code' => int, 'data' => array, 'error' => string, 'trace' => string].
+    public function data($id) {
+        return $this->request('/api/order/data', ['order_id' => $id]);
+    }
+
+    public function paid($id) {
+        return $this->request('/api/order/check/paid', ['order_id' => $id]);
+    }
+
+    public function report($date) {
+        return $this->request('/api/store/report', ['date' => $date]);
+    }
+
+    public function client_found($phone) {
+        $result = $this->request('/api/v2/client/validate', ['phone' => $phone]);
+        return !$result['ok'] || !empty($result['data']['found']);
+    }
+
+    public function letter($id) {
+        return $this->request('/api/order/guarantee/letter', ['order_id' => $id]);
+    }
+
+    // Returns ['ok' => bool, 'code' => int, 'data' => array, 'body' => string, 'error' => string, 'trace' => string].
     private function request($path, array $data) {
         $body     = wp_json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $response = wp_remote_post($this->url . $path, [
@@ -68,7 +89,7 @@ class Toloka_Chast_Api {
         ]);
 
         if (is_wp_error($response)) {
-            $result = ['ok' => false, 'code' => 0, 'data' => [], 'error' => $response->get_error_message(), 'trace' => ''];
+            $result = ['ok' => false, 'code' => 0, 'data' => [], 'body' => '', 'error' => $response->get_error_message(), 'trace' => ''];
         } else {
             $code   = (int) wp_remote_retrieve_response_code($response);
             $json   = json_decode(wp_remote_retrieve_body($response), true);
@@ -77,13 +98,14 @@ class Toloka_Chast_Api {
                 'ok'    => $code >= 200 && $code < 300,
                 'code'  => $code,
                 'data'  => $json,
+                'body'  => wp_remote_retrieve_body($response),
                 'error' => $json['message'] ?? '',
                 'trace' => (string) wp_remote_retrieve_header($response, 'trace-id'),
             ];
         }
 
         // Mask the phone number in the log.
-        $log_body = preg_replace('/("client_phone":"\+?\d{5})\d+(\d{2}")/', '$1*****$2', $body);
+        $log_body = preg_replace('/("(?:client_)?phone":"\+?\d{5})\d+(\d{2}")/', '$1*****$2', $body);
         wc_get_logger()->log($result['ok'] ? 'info' : 'error',
             sprintf('%s %s → %d %s [trace %s]', $path, $log_body, $result['code'], wp_json_encode($result['data'], JSON_UNESCAPED_UNICODE), $result['trace']),
             ['source' => 'toloka-chast']);
